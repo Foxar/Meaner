@@ -108,18 +108,10 @@ export class MeanerApiService {
     }
 
     getUserTweets(userId: string): Observable<HomeTweet[]>{
-        return of(
-            this.mockDatabase.tweets
-            .filter(t=>t.authorId==userId)
-            .sort((a,b) => {return b.date.getTime() - a.date.getTime()})
-            //.slice(offset,offset+10)
-            .map(this.mapMockTweetToHomeTweet.bind(this))
-            
+        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/user/${userId}`).pipe(
+            tap((a)=>{console.log("usertweets");console.log(a)})
         )
-        .pipe(
-            delay(this.apiDelay),
-            //tap(() => {throw new Error()})
-            );
+        
     }
 
     postLogin(name: string, password: string): Observable<LoginResponse> {
@@ -174,32 +166,10 @@ export class MeanerApiService {
     //In a 'real' service using http, this would look different with httpinterceptors etc.
     getProfile(profileId: string, currentUserId: string | null): Observable<ProfileResponse> {
 
-        console.log("Get profile");
-        const profile = this.mockDatabase.profiles.find(p => p.id == profileId)
-        if(!profile)
-            return throwError("Profile not found");
-        const user = this.mockDatabase.users.find(u=> u.id == profile.userId);
-        if(!user)
-            return throwError("User not found");
-        else {
-            {
-                //Blocked check, append mock with blocking functionality later
-                if(false)
-                {
-                    return of ({
-                        user: null,
-                        profile: null,
-                        blocked: true,
-                    });
-                }
-                else
-                return of ({
-                    user: user,
-                    profile: {...profile, tweetCount: this.mockDatabase.tweets.filter(t=>t.authorId==user.id).length},
-                    blocked: false,
-                });
-            }
-        }
+        return this.http.get<ProfileResponse>(`${this.apiUrl}profile/${profileId}`).pipe(
+            tap((a)=>{console.log("gettweet");console.log(a)})
+        );
+
     }
 /*
     getProfileByUserId(userId: string, currentUserId: string | null): Observable<ProfileResponse> {

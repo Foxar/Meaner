@@ -19,6 +19,10 @@ export interface ProfileDisplayModel {
 
 export interface ProfileResponse {
     user: User | null,
-    profile: Profile | null,
-    blocked: boolean;
+    id: string,
+    userId: string,
+    description: string,
+    dateCreated: Date,
+    tweetCount: number,
+    blocked: boolean | null;
 }

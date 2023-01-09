@@ -104,11 +104,13 @@ const db_findUserTweets = async(query,options) => {
 }
 
 const db_findProfile = async(query,options) => {
-    for(const [key,value] of Object.entries(query)){
-        if(['_id','userId'].includes(key))
-            query[key] = ObjectId(value);
-    }
-    return await db.collection("profiles").findOne({...query}); // Need a shallow copy, to not pass by reference
+
+    const prof = await db.collection("profiles").findOne({_id: ObjectId(query._id)});
+    const user = await db.collection("users").findOne({_id: prof.userId});
+    const tweetCount  = await db.collection("tweets").countDocuments({authorId: {$eq: prof.userId}});
+
+    return {...prof, user, tweetCount: tweetCount}
+
 }
 
 const db_findReplies = async(query,options) => {

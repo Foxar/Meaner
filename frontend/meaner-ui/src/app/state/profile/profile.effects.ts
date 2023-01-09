@@ -27,12 +27,12 @@ export class ProfileEffects {
                         return loadProfileBlocked();
                     else
                     {
-                        if(!profileResponse.profile || !profileResponse.user)
+                        if(!profileResponse || !profileResponse.user)
                             throw new Error("Profile null");
                         else
                             return loadProfileSuccess({
                                 profile: {
-                                    ...profileResponse.profile,
+                                    ...profileResponse,
                                     userName: profileResponse.user.name
                                 }
                             });
