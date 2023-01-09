@@ -104,12 +104,19 @@ const db_findUserTweets = async(query,options) => {
 }
 
 const db_findProfile = async(query,options) => {
+    if(query._id){
+        query._id = ObjectId(query._id);
+    }
+    if(query.userId){
+        query.userId = ObjectId(query.userId);
+    }
 
-    const prof = await db.collection("profiles").findOne({_id: ObjectId(query._id)});
+    const prof = await db.collection("profiles").findOne({...query});
+    console.log(query);
     const user = await db.collection("users").findOne({_id: prof.userId});
     const tweetCount  = await db.collection("tweets").countDocuments({authorId: {$eq: prof.userId}});
 
-    return {...prof, user, tweetCount: tweetCount}
+    return {...prof, user: {...user,}, tweetCount: tweetCount}
 
 }
 

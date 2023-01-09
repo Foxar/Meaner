@@ -166,7 +166,7 @@ export class MeanerApiService {
     //In a 'real' service using http, this would look different with httpinterceptors etc.
     getProfile(profileId: string, currentUserId: string | null): Observable<ProfileResponse> {
 
-        return this.http.get<ProfileResponse>(`${this.apiUrl}profile/${profileId}`).pipe(
+        return this.http.get<ProfileResponse>(`${this.apiUrl}profile/user/${profileId}`).pipe(
             tap((a)=>{console.log("gettweet");console.log(a)})
         );
 
