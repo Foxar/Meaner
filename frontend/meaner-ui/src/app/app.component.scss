@@ -1,0 +1,12 @@
+.appContainer {
+    display: flex;
+    max-width: 900px;
+    margin: 0 auto;
+    .navigationBar {
+        flex-grow: 1;
+    }
+    .appContent {
+        flex-grow: 3;
+        padding-left: 5vw;
+    }
+}

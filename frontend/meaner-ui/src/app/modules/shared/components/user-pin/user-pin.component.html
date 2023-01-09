@@ -1,0 +1,14 @@
+<div class="user-pin" >
+    <div *ngIf="user">
+        <p>
+            Current user:
+            <li> Name: {{user.name}}</li>
+            <li> ID: {{user.id}}</li>
+        </p>
+        <button (click)="logout()">Log out</button>
+    </div>
+    <div *ngIf="!user">
+        <p>Not logged in.</p>
+        <a routerLink="/login">Login</a>
+    </div>
+</div>

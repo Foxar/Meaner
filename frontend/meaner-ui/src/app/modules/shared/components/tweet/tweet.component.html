@@ -1,0 +1,9 @@
+<div class="homeTweet" [class.replyTweet]="tweet.replyToId != null">
+<a [routerLink]="'/profile/'+tweet.authorId" routerLinkActive="active"><p>{{tweet.authorName}}</p></a>
+<hr/>
+<a routerLink="{{'/tweet/'+tweet.id}}" >
+<p>{{tweet.content}}</p>
+<p>{{tweet.date.toLocaleString()}}
+Likes: {{tweet.likes}} Shares: {{tweet.shares}} Replies: {{tweet.replies}}</p>
+</a>
+</div>

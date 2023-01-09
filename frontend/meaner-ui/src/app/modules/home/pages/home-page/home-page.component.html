@@ -1,0 +1,19 @@
+<div class="appContent homePage">
+    <div class="tweetContainer">
+        <app-tweet-form [status]="tweetStatus" *ngIf="(this.userStatus$ | async) == 'LOGGED_IN'"></app-tweet-form>
+        <div *ngIf="!['ERROR', 'LOADING'].includes(this.homeStatus)">
+            <div *ngFor="let tweet of homeTweets$ | async">
+                <app-tweet [tweet]="tweet" ></app-tweet>
+            </div>
+        </div>
+        <div *ngIf="(this.homeStatus) =='ERROR'">
+            {{(this.homeError$ | async)}}
+        </div>
+        <div *ngIf="['LOADING'].includes((this.homeStatus))">Loading</div>
+        <div *ngIf="['LOADING_MORE'].includes((this.homeStatus))">Loading more...</div>
+
+    </div>
+    <div class="trendsContainer">
+        trends
+    </div>
+</div>

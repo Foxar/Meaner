@@ -1,0 +1,29 @@
+
+
+<div *ngIf="(this.profileStatus$ | async) as status">
+    profile page
+    <div *ngIf="status == 'LOADING_PROFILE'">
+        Loading ...
+    </div>
+    <div *ngIf="status == 'LOADED' && profile != null">
+        <h4>{{profile.userName}}</h4>
+        <p>{{profile.description}}</p>
+        <p>For user: {{profile.userId}}</p>
+        <p>{{profile.dateCreated.toString()}}</p>
+        <p>Tweets: {{profile.tweetCount}}</p>
+    </div>
+    <div *ngIf="status == 'ERROR_PROFILE'">
+        ERROR !
+        <p>{{(this.profileStatus$ | async)}}</p>
+    </div>
+
+    profile tweetStatus
+    <div *ngIf="status == 'LOADING_TWEETS'">
+        Loading tweets...
+    </div>
+    <div *ngIf="status == 'LOADED' && (profileTweets$ | async) as tweets">
+        <app-tweet *ngFor="let t of tweets" [tweet]="t"></app-tweet>
+    </div>
+</div>
+
+

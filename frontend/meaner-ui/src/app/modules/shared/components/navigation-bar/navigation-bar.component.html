@@ -1,0 +1,8 @@
+<nav class="navbar">
+    <ul>
+      <li><a routerLink="/" routerLinkActive="active">Home</a></li>
+      <li *ngIf="(this.currentUser$ | async) as currentUser"><a [routerLink]="'/profile/' + currentUser.id" routerLinkActive="active">Profile</a></li>
+      <li>Test 3</li>
+      <li>Test 4</li>
+      <li>Test 5</li>
+    </ul>

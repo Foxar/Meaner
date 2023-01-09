@@ -1,0 +1,21 @@
+
+<div *ngIf="tweet">
+    <app-tweet [tweet]="tweet">
+    </app-tweet>
+    <app-tweet-form [replyToId]="tweet.id" [status]="postReplyStatus">
+    </app-tweet-form>
+</div>
+<div *ngIf="(tweetPageStatus$ | async) == 'ERROR_LOADING'">
+    Failed to load the tweet. Make sure you visited the correct URL.
+</div>
+<div *ngIf="(tweetPageStatus$ | async) == 'LOADING'">
+    Loading ...
+</div>
+<div *ngIf="(tweetPageStatus$ | async) == 'LOADING_REPLIES'">
+    Loading replies...
+</div>
+<div *ngIf="(tweetPageStatus$ | async) == 'ERROR_LOADING_REPLIES'">
+    Failed to load the replies. Please try again later.
+</div>
+<app-tweet *ngFor="let tr of replies" [tweet]="tr">
+</app-tweet>

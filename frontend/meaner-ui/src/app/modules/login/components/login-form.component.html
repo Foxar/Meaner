@@ -1,0 +1,12 @@
+<div class="loginForm">
+    <p>Username:</p>
+    <input type="text" class="loginInput" [formControl]="loginControl">
+    <p>Password:</p>
+    <input type="password" class="passwordInput" [formControl]="passwordControl">
+    <button (click)="login()">Login</button>
+
+    <div *ngIf="status == 'LOGGING_IN'">
+        Logging in ...
+    </div>
+
+</div>
