@@ -47,11 +47,11 @@ const getUserTweets = async(req,res,next) => {
     const {id} = req.params;
 
     try {
-        const replies = await tweetService.fetchUserTweets(id);
-        if(replies == null || tweet.length == 0)
+        const tweets = await tweetService.fetchUserTweets(id);
+        if(tweets == null || tweets.length == 0)
             res.sendStatus(404);
         else
-            res.status(200).json(replies);
+            res.status(200).json(tweets);
     }catch(e){
         next(e);
     }

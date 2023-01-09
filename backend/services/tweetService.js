@@ -48,7 +48,15 @@ const fetchTweet = async(id) => {
 
 const fetchUserTweets = async(id) => {
     try{
-        return tweet = await db_findUserTweets({id: id});
+        let tweets = await db_findUserTweets({id: id});
+        tweets = tweets.map(t=>{
+            let {_id, ...mappedTweet} = t
+            return {
+                ...mappedTweet,
+                id: t._id
+            }
+        })
+        return tweets;
     }catch(e){
         throw e;
     }
