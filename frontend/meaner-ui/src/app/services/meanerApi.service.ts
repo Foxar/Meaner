@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { delay, find, map, Observable, of, tap, throwError } from "rxjs";
+import { STORAGE_JWT } from "../constants/constants";
 import { PostTweet } from "../modules/shared/models/tweetModels";
 import { HomeTweet } from "../state/home/home-tweet.model";
 import { Profile, ProfileResponse } from "../state/profile/profile.model";
@@ -61,6 +62,16 @@ export class MeanerApiService {
     };
 
     postTweet(tweet: PostTweet): Observable<HomeTweet> {
+        const jwt = localStorage.getItem(STORAGE_JWT) || '';
+
+        console.log(tweet);
+        return this.http.post<HomeTweet>(`${this.apiUrl}tweets/`,tweet,{headers: new HttpHeaders({Authorization: jwt})}).pipe(
+            delay(this.apiDelay),
+            tap(() => {
+                if(!this.validatePostedTweet(tweet))
+                    throw new Error();
+            })
+        )
         return of(this.mapMockTweetToHomeTweet(this.mockInsertDatabaseTweet(tweet)))
                 .pipe(
                     delay(this.apiDelay),
@@ -166,42 +177,18 @@ export class MeanerApiService {
     //In a 'real' service using http, this would look different with httpinterceptors etc.
     getProfile(profileId: string, currentUserId: string | null): Observable<ProfileResponse> {
 
-        return this.http.get<ProfileResponse>(`${this.apiUrl}profile/user/${profileId}`).pipe(
-            tap((a)=>{console.log("gettweet");console.log(a)})
+        return this.http.get<ProfileResponse>(`${this.apiUrl}profile/${profileId}`).pipe(
+            tap((a)=>{console.log("getProfile()");console.log(a)})
         );
 
     }
-/*
+
     getProfileByUserId(userId: string, currentUserId: string | null): Observable<ProfileResponse> {
-        const profile = this.mockDatabase.profiles.find(p => p.userId == userId)
-        if(!profile)
-            return throwError("Profile not found");
-        const user = this.mockDatabase.users.find(u=> u.id == profile.userId);
-        if(!user)
-            return throwError("User not found");
-        else {
-            {
-                //Blocked check, append mock with blocking functionality later
-                if(false)
-                {
-                    return of ({
-                        user: null,
-                        profile: null,
-                        blocked: true,
-                    });
-                }
-                else
-                return of ({
-                    user: user,
-                    profile: profile,
-                    blocked: false,
-                });
-            }
-        }
+        return this.http.get<ProfileResponse>(`${this.apiUrl}profile/user/${userId}`).pipe(
+            tap((a)=>{console.log("getProfileByUserId()");console.log(a)})
+        );
     }
 
-
-*/
     private mapMockTweetToHomeTweet(mockTweet: MockTweet): HomeTweet {
         return {
             ...mockTweet,

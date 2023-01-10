@@ -4,7 +4,7 @@ import { Profile, ProfileDisplayModel } from "./profile.model";
 
 export const loadProfile = createAction(
     '[Profile] Load profile',
-    props<{profileId: string}>()
+    props<{userId: string}>()
 );
 
 export const loadProfileByUser = createAction(

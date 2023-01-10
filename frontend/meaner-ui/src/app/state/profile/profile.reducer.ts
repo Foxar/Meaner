@@ -11,7 +11,7 @@ export const initialState: ProfileState  ={
 
 export const profileReducer = createReducer(
     initialState,
-    on(loadProfile, (state: ProfileState, {profileId}) => ({
+    on(loadProfile, (state: ProfileState, {userId}) => ({
         ...state,
         status: ProfileStateStatus.LOADING_PROFILE,
     })),

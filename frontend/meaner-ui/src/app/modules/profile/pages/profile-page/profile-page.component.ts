@@ -31,7 +31,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       tap(p => {
         console.log("params tap");
         if(p['profileId']){
-          this.store.dispatch(loadProfile({profileId: p['profileId']}))
+          this.store.dispatch(loadProfile({userId: p['profileId']}))
         }else
           throw new Error("Missing profileID. Can't load profile.");
       })
