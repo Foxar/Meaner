@@ -7,7 +7,6 @@ import { HomeTweet } from "../state/home/home-tweet.model";
 import { Profile, ProfileResponse } from "../state/profile/profile.model";
 import { LoginResponse } from "../state/user/user.model";
 import { LoginBody } from "./apiModels";
-import { generateDatabase, MockTweet } from "./mockDataBase";
 
 @Injectable({providedIn: 'root'})
 export class MeanerApiService {

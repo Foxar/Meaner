@@ -20,7 +20,7 @@ export class ProfileEffects {
         ofType(loadProfile),
         switchMap((action) => {
             console.log("PROFILEEE");
-            return this.meanerService.getProfileByUserId(action.userId, null).pipe(
+            return this.meanerService.getProfileByUserId(action.userId).pipe(
                 tap(() => console.log("loadProfile effect")),
                 map((profileResponse) => {
                     if(profileResponse.blocked)
