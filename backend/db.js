@@ -161,15 +161,11 @@ const db_insertTweet = async(doc) => {
             replyToId: doc.replyToId?ObjectId(doc.replyToId):null,
             date: new Date(),
         }
-        const insertResult = await db.collection("tweets").insertOne(doc);
-        // console.log(insertResult);
-        // console.log(doc);
+        await db.collection("tweets").insertOne(doc);
         if(doc.replyToId){
             await db.collection("tweets").updateOne({_id: ObjectId(doc.replyToId)},{$inc: {replies:1}})
-            return 200;
         }
-
-        return 200;
+        return doc;
     }catch(e){
         throw e;
     }
