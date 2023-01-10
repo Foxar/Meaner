@@ -69,6 +69,7 @@ const db_findTweets = async (query, options) => {
     
     return await (db.collection("tweets").aggregate([
         { $match: {...query}},
+        { $sort: options.sort },
         { $skip: options.skip },
         { $limit: options.limit },
         { $lookup: {from: "users", localField: "authorId", foreignField:"_id", as: "author",},},

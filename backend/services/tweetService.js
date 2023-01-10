@@ -7,7 +7,7 @@ const fetchHomeTweets = async(offset) => {
         offset = parseInt(offset);
         console.log("ASDF");
         console.log(offset);
-        let tweets =  await db_findTweets({replyToId: null}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": 1}, skip: offset});
+        let tweets =  await db_findTweets({replyToId: null}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
         console.log(tweets);
         tweets = tweets.map(t=>{
             let {_id, ...mappedTweet} = t
