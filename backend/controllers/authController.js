@@ -31,7 +31,7 @@ const validateToken = async(req,res,next) => {
         if(validationRes){
             const user = await tweetService.fetchUserByName(validationRes.login);
             const userMapped = {name: user.name, id: user._id};
-            res.status(200).json({...validationRes, ...userMapped});
+            res.status(200).json({token, ...validationRes, ...userMapped});
         }else {
             res.status(401).send({error: "Invalid or missing token."})
         }
