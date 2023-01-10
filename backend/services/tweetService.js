@@ -39,8 +39,12 @@ const fetchTweets = async(offset) => {
 const fetchTweet = async(id) => {
     try {
         let query = {_id: id};
-        let tweet = await db_findTweet(query);
-        return tweet;
+        let t = await db_findTweet(query);
+        let {_id, ...mappedTweet} = t
+        return {
+            ...mappedTweet,
+            id: t._id
+        }
     }catch(e) {
        throw e;
     }

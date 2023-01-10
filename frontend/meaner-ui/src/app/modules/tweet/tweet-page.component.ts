@@ -50,7 +50,7 @@ export class TweetPageComponent implements OnInit {
       if(t != null){
         console.log("dispatching replies")
         if(this.tweet == null)
-          this.store.dispatch(loadReplies({tweetId: t._id})) //If it's new tweet load, get replies. If it's data update (ex. replies+1), dont'.   
+          this.store.dispatch(loadReplies({tweetId: t.id})) //If it's new tweet load, get replies. If it's data update (ex. replies+1), dont'.   
         this.tweet = t;
       }
     });
@@ -67,6 +67,7 @@ export class TweetPageComponent implements OnInit {
         this.tweetId = p['id'];
         this.store.dispatch(loadTweet({tweetId: this.tweetId}));
     })
+
 
   }
 
