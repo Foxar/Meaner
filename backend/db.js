@@ -231,6 +231,7 @@ const db_insertTweetToUserLikes = async(userId, tweetId) => {
 
     try {
         await db.collection("users").updateOne({_id: userId}, {$addToSet: { likedTweets: tweetId}});
+        await db.collection("tweets").updateOne({_id: tweetId}, {$inc: {likes:1}});
     }catch(e){
         throw e;
     }
@@ -242,6 +243,7 @@ const db_removeTweetFromUserLikes = async(userId, tweetId) => {
 
     try {
         await db.collection("users").updateOne({_id: userId}, {$pull: { likedTweets: tweetId}});
+        await db.collection("tweets").updateOne({_id: tweetId}, {$inc: {likes:-1}});
     }catch(e){
         throw e;
     }
