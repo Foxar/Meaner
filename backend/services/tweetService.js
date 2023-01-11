@@ -1,4 +1,4 @@
-const {db_findTweet, db_findTweets, db_insertTweet, db_findReplies, db_findUserTweets, db_findProfile, db_findUser} = require('../db')
+const {db_insertTweetToUserLikes, db_findTweet, db_findTweets, db_insertTweet, db_findReplies, db_findUserTweets, db_findProfile, db_findUser, db_removeTweetFromUserLikes} = require('../db')
 
 const TWEET_REQUEST_LIMIT = 10;
 
@@ -28,7 +28,7 @@ const fetchTweets = async(offset) => {
         offset = parseInt(offset);
         console.log("ASDF");
         console.log(offset);
-        const tweets =  await db_findTweets({}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": 1}, skip: offset});
+        const tweets =  await db_findTweets({}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
         console.log(tweets);
         return tweets;
     }catch(e) {
@@ -90,6 +90,26 @@ const insertTweet = async(tweet) => {
     }
 }
 
+const switchTweetLike = async(userId, tweetId) => {
+    if(userId == undefined || tweetId == undefined)
+    {
+        throw new Error("400")
+    }
+    
+    try{
+        const user = await db_findUser({_id: userId})
+        if(user.likedTweets.map((lt) => lt.toString()).includes(tweetId))
+            return await db_removeTweetFromUserLikes(userId, tweetId);
+        else
+            return await db_insertTweetToUserLikes(userId, tweetId);
+    }catch(e){
+        console.error(e);
+        throw e;
+    }
+
+
+}
+
 const fetchProfileById = async(id) => {
     if(id == null)
         throw new Error("400")   
@@ -145,4 +165,5 @@ module.exports = {
     fetchProfileById,
     fetchProfileByUserId,
     fetchUserByName,
+    switchTweetLike
 }
