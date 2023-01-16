@@ -4,12 +4,15 @@
             Something went wrong while posting. Please try again later.
         </div>
         <div>
-            <h4>{{this.replyToId == null ? "New tweet":"Reply to this tweet"}}</h4>
-            <input type="textarea" [formControl]="tweetContent" class="contentInput">
-            <span *ngFor="let errorMessage of errorToMessage()" class="error">
-                {{errorMessage}}
-            </span>
-            <button (click)="postTweet()">Post</button>
+            <mat-form-field class="textarea-formfield" floatLabel="never" [hideRequiredMarker]="true"            >
+                <textarea matInput 
+                    [placeholder]="getPlaceholder()" 
+                    [formControl]="tweetContent" ></textarea>
+                <span *ngFor="let errorMessage of errorToMessage()" class="error">
+                    <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
+                </span>
+            </mat-form-field>
+            <button mat-flat-button color="primary"(click)="postTweet()">Post</button>
         </div>
     </div>
     <div *ngIf="status == 'POSTING'">

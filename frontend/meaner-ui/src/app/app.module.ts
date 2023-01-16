@@ -14,7 +14,6 @@ import { UserEffects } from './state/user/user.effects';
 import { LoginGuardService } from './auth/login-guard.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-
 const routes: Routes = [
   {
     path: '',
@@ -39,12 +38,12 @@ const routes: Routes = [
     AppComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
     SharedModule,
     RouterModule.forRoot(routes),
     StoreModule.forRoot(appReducer),
     EffectsModule.forRoot([HomeEffects]),
-    BrowserAnimationsModule, //Shouldnt I add tweet effects here too???
     
   ],
   providers: [],

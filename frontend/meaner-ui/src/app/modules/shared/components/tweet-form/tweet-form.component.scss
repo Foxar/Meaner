@@ -1,9 +1,27 @@
 .tweetForm {
+    box-sizing: content-box;
+    overflow: hidden;
+    padding: 5px;
+    border: solid rgb(47, 51, 54) 0;
+    border-top-width: 1px;
+    .textarea-formfield {
+        font-weight: 100;
+        font-size: large;
+        width: 100%;
+
+        textarea {
+            resize: none;
+        }
+    }
     .contentInput {
         display: block;
     }
     .error {
         display: block;
         width: 100%;
+    }
+    button {
+        
+        float: right;
     }
 }

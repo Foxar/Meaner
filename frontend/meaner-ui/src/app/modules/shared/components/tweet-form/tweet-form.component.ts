@@ -6,6 +6,7 @@ import { addTweet } from 'src/app/state/home/home.actions';
 import { HomeState } from 'src/app/state/home/home.state';
 import { postReply } from 'src/app/state/tweet/tweet.actions';
 
+
 export enum TweetFormStatus {
   INIT = 'INIT',
   POSTING = 'POSTING',
@@ -69,5 +70,9 @@ export class TweetFormComponent implements OnInit {
       authorId: "1",
       replyToId: this.replyToId
     }}))
+  }
+
+  getPlaceholder() {
+    return this.replyToId == null ? "New tweet":"Reply to this tweet"
   }
 }
