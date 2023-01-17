@@ -1,14 +1,11 @@
 <div class="user-pin" >
     <div *ngIf="user">
-        <p>
-            Current user:
-            <li> Name: {{user.name}}</li>
-            <li> ID: {{user.id}}</li>
-        </p>
-        <button (click)="logout()">Log out</button>
+        <img [src]="'https://i.pravatar.cc/100?u='+user.id">
+        <h4 class="username">{{user.name}}</h4>
+        <button mat-flat-button color="secondary" (click)="logout()">Log out</button>
     </div>
     <div *ngIf="!user">
-        <p>Not logged in.</p>
-        <a routerLink="/login">Login</a>
+        
+        <a mat-flat-button color="primary" routerLink="/login">Login</a>
     </div>
 </div>
