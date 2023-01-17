@@ -1,0 +1,6 @@
+<div *ngIf="(currentUser$ | async) as user">
+    <h4>settings page for {{user.name}}</h4>
+</div>
+<div *ngIf="(currentUser$ | async) == null">
+404
+</div> 

@@ -30,6 +30,11 @@ const routes: Routes = [
   {
     path: 'profile/:profileId',
     loadChildren: () => import('./modules/profile/profile.module').then(m=>m.ProfileModule)
+  },
+  {
+    //TODO: Redirect the user to login page if not logged in from this url.
+    path: 'settings',
+    loadChildren: () => import('./modules/settings/settings.module').then(m=>m.SettingsModule)
   }
 ];
 
