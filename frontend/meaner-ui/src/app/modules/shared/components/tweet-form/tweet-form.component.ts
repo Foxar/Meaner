@@ -73,6 +73,6 @@ export class TweetFormComponent implements OnInit {
   }
 
   getPlaceholder() {
-    return this.replyToId == null ? "New tweet":"Reply to this tweet"
+    return this.replyToId == null ? "What are you thinking?":"Reply to this tweet"
   }
 }
