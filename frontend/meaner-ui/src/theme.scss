@@ -1,0 +1,9 @@
+@import '@angular/material/theming';
+@include mat-core();
+
+
+$meaner-primary: mat-palette($mat-light-blue);
+$meaner-accent: mat-palette($mat-pink, 100, 500, A100);
+$meaner-warn: mat-palette($mat-red);
+$meaner-theme: mat-dark-theme($meaner-primary, $meaner-accent, $meaner-warn);
+@include angular-material-theme($meaner-theme);

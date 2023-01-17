@@ -11,12 +11,21 @@ import { EffectsModule } from '@ngrx/effects';
 import { UserEffects } from 'src/app/state/user/user.effects';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
 
 const exportComponents = [
   NavigationBarComponent,
   TweetComponent,
   TweetFormComponent,
   UserPinComponent
+]
+
+const materialsModules = [
+  MatInputModule,
+  MatFormFieldModule,
+  MatButtonModule,
 ]
 
 @NgModule({
@@ -26,6 +35,7 @@ const exportComponents = [
     UserPinComponent,
   ],
   imports: [
+    ...materialsModules,
     HttpClientModule,
     RouterModule,
     CommonModule,
@@ -34,6 +44,7 @@ const exportComponents = [
     EffectsModule.forFeature([UserEffects])
   ],
   exports: [
+    ...materialsModules,
     ...exportComponents
   ],
   providers: [...exportComponents]

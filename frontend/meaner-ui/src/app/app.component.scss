@@ -1,18 +1,27 @@
 .appContainer {
     color: whitesmoke;
-    display: flex;
+    padding: 0 10%;
     
-    background: black;
-    justify-content: center;
+    
+    --navbarWidth: 20vw;
 
+    height: 100%;
+    overflow-y: scroll;
     
     .navigationBar {
-        flex-grow: 2;
-        border-right:5px solid white;
+        box-sizing: content-box;
+        height: 100%;
+        
+        border-right:solid rgb(47, 51, 54) 1px;
+        position: fixed;
+        width: var(--navbarWidth);
     }
     .appContent {
-        flex-grow: 5;
-        margin-right: 15vw;
+        box-sizing: border-box;
+        border:solid rgb(47, 51, 54) 1px;
+        margin-left: var(--navbarWidth);
+        
+        margin-right: 30vw;
     }
 
 }

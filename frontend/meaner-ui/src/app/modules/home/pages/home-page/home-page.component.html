@@ -1,5 +1,6 @@
 <div class="appContent homePage">
     <div class="tweetContainer">
+        <h2>Home</h2>
         <app-tweet-form [status]="tweetStatus" *ngIf="(this.userStatus$ | async) == 'LOGGED_IN'"></app-tweet-form>
         <div *ngIf="!['ERROR', 'LOADING'].includes(this.homeStatus)">
             <div *ngFor="let tweet of homeTweets$ | async">

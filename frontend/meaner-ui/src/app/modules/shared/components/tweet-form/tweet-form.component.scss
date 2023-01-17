@@ -1,9 +1,40 @@
 .tweetForm {
+    box-sizing: content-box;
+    overflow: hidden;
+    padding: 15px;
+    border: solid rgb(47, 51, 54) 0;
+    border-top-width: 1px;
+    display: flex;
+    .authorImg {
+        padding: 10px 15px;
+        img {
+            width: 50px;
+            margin-right: 5px;
+            border-radius: 50%;
+        }
+        height: 100%;
+    }
+    .tweetFormInner{
+        flex-grow:5;
+    }
+    .textarea-formfield {
+        font-weight: 100;
+        font-size: large;
+        width: 100%;
+
+        textarea {
+            resize: none;
+        }
+    }
     .contentInput {
         display: block;
     }
     .error {
         display: block;
         width: 100%;
+    }
+    button {
+        
+        float: right;
     }
 }

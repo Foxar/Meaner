@@ -8,6 +8,7 @@ router
     .post('/', authController.authMiddleware, tweetController.postTweet)
     .get('/replies/:id', tweetController.getReplies)
     .get('/user/:id', tweetController.getUserTweets)
+    .get('/like/:userId/:tweetId', tweetController.likeTweet)
     // .delete('/:id',tweetController.deleteTweet)
 
-module.exports = router;
+module.exports = router; 

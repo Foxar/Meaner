@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { tap } from 'rxjs';
 import { AppState } from 'src/app/state/app.state';
 import { addTweet } from 'src/app/state/home/home.actions';
 import { HomeState } from 'src/app/state/home/home.state';
 import { postReply } from 'src/app/state/tweet/tweet.actions';
+import { selectUser } from 'src/app/state/user/user.selector';
+
 
 export enum TweetFormStatus {
   INIT = 'INIT',
@@ -23,10 +26,10 @@ export class TweetFormComponent implements OnInit {
   @Input() error: string = '';
   @Input() replyToId: string | null = null;
   tweetContent = new FormControl('', [
-    Validators.required,
-    Validators.minLength(5),
     Validators.maxLength(32),
   ]);
+  currentUser = this.store.select(selectUser).pipe(tap(console.log));
+  
 
   constructor(private store: Store<AppState>) { }
 
@@ -49,8 +52,6 @@ export class TweetFormComponent implements OnInit {
           return `Needs at least ${v.requiredLength} characters to post.`;
         case 'maxlength':
           return `Needs less than ${v.requiredLength} characters to post.`;
-        case 'required':
-          return `Tweet cannot be empty.`;
         default:
           return '';
       }
@@ -69,5 +70,9 @@ export class TweetFormComponent implements OnInit {
       authorId: "1",
       replyToId: this.replyToId
     }}))
+  }
+
+  getPlaceholder() {
+    return this.replyToId == null ? "What are you thinking?":"Reply to this tweet"
   }
 }

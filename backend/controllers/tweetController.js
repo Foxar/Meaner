@@ -119,6 +119,16 @@ const getProfileByUserId = async (req,res,next) => {
     }
 }
 
+const likeTweet = async(req,res,next) => {
+    const {userId, tweetId} = req.params;
+    try{
+        await tweetService.switchTweetLike(userId, tweetId)
+        res.sendStatus(200);
+    }catch(e){
+        next(e);
+    }
+}
+
 
 module.exports = {
     getAllTweets,
@@ -129,5 +139,6 @@ module.exports = {
     // deleteTweet,
     getReplies,
     getProfileById,
-    getProfileByUserId
+    getProfileByUserId,
+    likeTweet
 }

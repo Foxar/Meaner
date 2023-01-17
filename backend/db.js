@@ -223,6 +223,32 @@ const db_findUser = async(query) => {
     }
 }
 
+
+
+const db_insertTweetToUserLikes = async(userId, tweetId) => {
+    userId = ObjectId(userId);
+    tweetId = ObjectId(tweetId);
+
+    try {
+        await db.collection("users").updateOne({_id: userId}, {$addToSet: { likedTweets: tweetId}});
+        await db.collection("tweets").updateOne({_id: tweetId}, {$inc: {likes:1}});
+    }catch(e){
+        throw e;
+    }
+}
+
+const db_removeTweetFromUserLikes = async(userId, tweetId) => {
+    userId = ObjectId(userId);
+    tweetId = ObjectId(tweetId);
+
+    try {
+        await db.collection("users").updateOne({_id: userId}, {$pull: { likedTweets: tweetId}});
+        await db.collection("tweets").updateOne({_id: tweetId}, {$inc: {likes:-1}});
+    }catch(e){
+        throw e;
+    }
+}
+
 const db_verifyCredentials = async(login,password) => {
     try{
         const user = await db_findUser({name: login});
@@ -248,4 +274,6 @@ module.exports = {
     db_findProfile,
     db_findUser,
     db_verifyCredentials,
+    db_insertTweetToUserLikes,
+    db_removeTweetFromUserLikes
 }

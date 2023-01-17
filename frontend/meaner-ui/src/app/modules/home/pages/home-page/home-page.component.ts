@@ -17,6 +17,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>) { }
 
+  appContainerEl: any;
+
   tweetStatus: TweetFormStatus = TweetFormStatus.INIT;
   homeStatus: HomeStateStatus = HomeStateStatus.INIT
 
@@ -60,12 +62,12 @@ export class HomePageComponent implements OnInit, OnDestroy {
     this.store.select(selectUserStatus).pipe(tap(()=>{console.log("USER STATUS SELECTOR")}),tap(console.log)).subscribe(u=>{
       console.log(u);
     })
+    this.appContainerEl = document.querySelector(".appContainer");
+    this.appContainerEl.addEventListener("scroll", this.onScroll.bind(this))
   }
 
-  @HostListener('window:scroll', ['$event'])
   onScroll(event: Event){
-    const percentScroll = window.pageYOffset / (document.body.scrollHeight - window.innerHeight);
-    //console.log();
+    const percentScroll = this.appContainerEl.scrollHeight / (document.body.scrollHeight - window.innerHeight);
     if(percentScroll > 0.8 && (this.homeStatus) != HomeStateStatus.LOADING_MORE)
       this.store.dispatch(loadTweets({append:true}));
   }
