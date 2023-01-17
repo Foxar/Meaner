@@ -1,5 +1,8 @@
 <div class="tweetForm">
-    <div *ngIf="status != 'POSTING'">
+    <div class="authorImg">
+        <img [src]="'https://i.pravatar.cc/100?u='+(currentUser | async).id">
+    </div>
+    <div class="tweetFormInner" *ngIf="status != 'POSTING'">
         <div *ngIf="status == 'ERROR'">
             Something went wrong while posting. Please try again later.
         </div>
@@ -12,7 +15,7 @@
                     <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
                 </span>
             </mat-form-field>
-            <button mat-flat-button color="primary"(click)="postTweet()">Post</button>
+            <button mat-flat-button color="primary"(click)="postTweet()" [disabled]="this.tweetContent.value == ''">Post</button>
         </div>
     </div>
     <div *ngIf="status == 'POSTING'">
