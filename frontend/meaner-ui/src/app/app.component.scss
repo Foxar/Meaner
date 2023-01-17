@@ -1,5 +1,6 @@
 .appContainer {
     color: whitesmoke;
+    padding: 0 10%;
     
     
     --navbarWidth: 20vw;
@@ -20,7 +21,7 @@
         border:solid rgb(47, 51, 54) 1px;
         margin-left: var(--navbarWidth);
         
-        margin-right: 40vw;
+        margin-right: 30vw;
     }
 
 }
