@@ -1,10 +1,27 @@
 div.user-pin {
+    img {
+        border-radius: 50%;
+        width: 50px;
+    }
     position: fixed;
-    bottom: 0;
-    left: 5vw;
-    border: 1px solid black;
-    border-bottom-width: 0;
-    border-radius: 5px 5px 0 0;
-    width: max-content;
-    background-color: black;
+    bottom: 20px;
+    left: 15vw;
+    width: 10vw;
+    div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 12vw;
+        h4.username {
+            margin: 0;
+            font-weight: 400;
+            font-size: 20px;
+            width: 50%;
+            margin-left: 15px;
+        }
+        button {
+            
+        }
+    }
 }
