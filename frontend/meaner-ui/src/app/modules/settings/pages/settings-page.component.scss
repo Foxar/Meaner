@@ -1,0 +1,61 @@
+@import '../../../../theme.scss';
+
+.settings-page-content {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+.tablist {
+    padding-top: 25px;
+    flex: 2;
+    border-style: solid;
+    border-color: rgb(47, 51, 54);
+    border-width: 0 1px 0 0;
+    border-bottom-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    h1 {
+        padding: 0 25px;
+    }
+}
+
+.tabcontent {
+    flex: 2;
+    border-bottom-width: 0;
+    
+}
+
+a.settings-category-link {
+    text-decoration: none;
+    color: inherit;
+    padding: 10px 25px;
+    display: flex;
+    vertical-align: middle;
+    font-size: 20px;
+    line-height: 20px;
+    align-items: center;
+    border-right: 2px solid transparent;
+
+    .link-label {
+        flex-grow: 10;
+        font-weight: 300;
+    }
+
+    .link-chevron {
+        color: rgba(245, 245, 245, 0.452);
+    }
+
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.181);
+        transition: background-color 150ms linear;
+    }
+
+    &.selected-category {
+        border-right-color: mat-color($meaner-primary)
+    }
+
+}
