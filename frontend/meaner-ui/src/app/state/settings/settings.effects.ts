@@ -26,8 +26,14 @@ export class SettingsEffects {
                         return changePasswordSuccess();
                     }),
                     catchError((error) => {
-                        console.log(error.message);
-                        return of(changePasswordFailure({error: error.message}))
+                        console.log(error);
+                        let errorMessage;
+                        if(error.status == 401){
+                            errorMessage = 'Invalid password'
+                        }else {
+                            errorMessage = error.message;
+                        }
+                        return of(changePasswordFailure({error: errorMessage}))
                     })
                 )
             }),
