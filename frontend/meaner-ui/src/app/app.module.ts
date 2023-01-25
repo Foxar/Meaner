@@ -34,7 +34,8 @@ const routes: Routes = [
   {
     //TODO: Redirect the user to login page if not logged in from this url.
     path: 'settings',
-    loadChildren: () => import('./modules/settings/settings.module').then(m=>m.SettingsModule)
+    loadChildren: () => import('./modules/settings/settings.module').then(m=>m.SettingsModule),
+    canActivate: [LoginGuardService]
   }
 ];
 
@@ -51,7 +52,7 @@ const routes: Routes = [
     EffectsModule.forRoot([HomeEffects]),
     
   ],
-  providers: [],
+  providers: [LoginGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
