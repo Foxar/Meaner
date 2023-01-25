@@ -1,4 +1,4 @@
-const { db_findUser, db_verifyCredentials } = require("../db")
+const { db_findUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword } = require("../db")
 const jwt = require('jwt-simple')
 
 const JWTSECRET = 'somesecret';
@@ -40,11 +40,28 @@ const validateToken = async(token) => {
     }
 }
 
+const changePassword = async(userId, password, newPassword) => {
+    try {
+        const validateRes = await db_validatePassword(userId,password);
+        console.log(validateRes);
+        const changePassRes = await db_changeUserPassword(userId, newPassword)
+        console.log(changePassRes);
+        if(changePassRes.acknowledged && changePassRes.modifiedCount > 0){
+            return true;
+        }else{
+            return false
+        }
+    }catch(e){
+        throw e;
+    }
+}
+
 
 
 
 module.exports = {
     checkCredentials,
     generateToken,
-    validateToken
+    validateToken,
+    changePassword
 }
