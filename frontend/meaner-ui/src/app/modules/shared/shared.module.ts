@@ -14,6 +14,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
+
 
 const exportComponents = [
   NavigationBarComponent,
@@ -26,6 +29,7 @@ const materialsModules = [
   MatInputModule,
   MatFormFieldModule,
   MatButtonModule,
+  MatIconModule,
 ]
 
 @NgModule({

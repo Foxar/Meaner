@@ -88,4 +88,11 @@ export class MeanerApiService {
         );
     }
 
+    postPasswordChange(userId: string, password: string, oldPassword: string): Observable<{}> {
+        let body = {userId, password: oldPassword, newPassword: password};
+        return this.http.post(`${this.apiUrl}auth/changePassword`, body).pipe(
+            tap((a)=>{console.log("postPasswordChange()");console.log(a)})
+        );
+    }
+
 }

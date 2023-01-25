@@ -30,6 +30,11 @@ const routes: Routes = [
   {
     path: 'profile/:profileId',
     loadChildren: () => import('./modules/profile/profile.module').then(m=>m.ProfileModule)
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./modules/settings/settings.module').then(m=>m.SettingsModule),
+    canActivate: [LoginGuardService]
   }
 ];
 
@@ -46,7 +51,7 @@ const routes: Routes = [
     EffectsModule.forRoot([HomeEffects]),
     
   ],
-  providers: [],
+  providers: [LoginGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

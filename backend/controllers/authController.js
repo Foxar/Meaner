@@ -53,8 +53,25 @@ const authMiddleware = async(req,res,next) => {
     }
 }
 
+const changePassword = async(req,res,next) => {
+    try{
+        const creds = req.body;
+        console.log(creds);
+        const {userId, password, newPassword}= creds;
+        const changePassRes = await authService.changePassword(userId, password, newPassword);
+        if(changePassRes.result){
+            res.status(200).json()
+        }else {
+            res.sendStatus(changePassRes.status);
+        }
+    }catch(e){
+        next(e);
+    }
+}
+
 module.exports = {
     postLogin,
     validateToken,
-    authMiddleware
+    authMiddleware,
+    changePassword,
 }

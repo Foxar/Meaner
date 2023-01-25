@@ -2,5 +2,6 @@
     <ul>
       <li><a routerLink="/" routerLinkActive="active">Home</a></li>
       <li *ngIf="(this.currentUser$ | async) as currentUser"><a [routerLink]="'/profile/' + currentUser.id" routerLinkActive="active">Profile</a></li>
+      <li *ngIf="(this.currentUser$ | async) as currentUser"><a [routerLink]="'/settings'" routerLinkActive="active">Settings</a></li>
       
     </ul>

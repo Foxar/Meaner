@@ -109,7 +109,7 @@ const db_findProfile = async(query,options) => {
         query._id = ObjectId(query._id);
     }
     if(query.userId){
-        query.userId = ObjectId(query.userId);
+        query.userId = ObjectId(query.userId); 
     }
 
     const prof = await db.collection("profiles").findOne({...query});
@@ -262,6 +262,35 @@ const db_verifyCredentials = async(login,password) => {
     }
 }
 
+const db_validatePassword = async(userId, password) => {
+    try{
+        const user = await db_findUser({_id: userId});
+        console.log(user);
+        const res = await bcrypt.compare(password, user.password);
+        console.log(res);
+        return res;
+    }
+    catch(e){
+        throw e;
+    }
+}
+
+const db_changeUserPassword = async(userId, newPassword) => {
+    try{
+        hash = await bcrypt.hash(newPassword, saltRounds);
+        return await db.collection("users").updateOne(
+        {
+            _id: new ObjectId(userId)
+        },
+        {
+            $set: { "password": hash }
+        }
+        )
+    }catch(e){
+        throw e;
+    }
+}
+
 
 module.exports = {
     db_findTweets,
@@ -274,6 +303,8 @@ module.exports = {
     db_findProfile,
     db_findUser,
     db_verifyCredentials,
+    db_validatePassword,
+    db_changeUserPassword,
     db_insertTweetToUserLikes,
     db_removeTweetFromUserLikes
 }
