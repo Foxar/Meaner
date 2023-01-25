@@ -1,24 +1,28 @@
-div.user-pin {
+:host {
     img {
         border-radius: 50%;
         width: 50px;
     }
     position: fixed;
     bottom: 20px;
-    left: 15vw;
-    width: 10vw;
+    margin-left: 5vw;
+    
     div {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        width: 12vw;
+        
         h4.username {
             margin: 0;
             font-weight: 400;
             font-size: 20px;
             width: 50%;
-            margin-left: 15px;
+            margin: 0 15px;
+        }
+        button {
+            box-sizing: content-box;
+            width: min-content;
         }
     }
 }

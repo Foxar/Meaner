@@ -1,12 +1,12 @@
 .appContainer {
-    color: whitesmoke;
-    padding: 0 10vw;
+    color: whitesmoke;    
+    width: min-content;
+    margin: 0 auto;
     
-    
-    --navbarWidth: 20vw;
+    --navbarWidth: 18vw;
 
     height: 100%;
-    overflow-y: scroll;
+    
     
     .navigationBar {
         box-sizing: content-box;
@@ -21,7 +21,9 @@
         border:solid rgb(47, 51, 54) 1px;
         margin-left: var(--navbarWidth);
         
-        margin-right: 30vw;
+        margin-right: 0;
+        min-width: 600px;
+        
     }
 
 }
