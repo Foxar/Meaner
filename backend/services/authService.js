@@ -44,13 +44,18 @@ const changePassword = async(userId, password, newPassword) => {
     try {
         const validateRes = await db_validatePassword(userId,password);
         console.log(validateRes);
-        const changePassRes = await db_changeUserPassword(userId, newPassword)
-        console.log(changePassRes);
-        if(changePassRes.acknowledged && changePassRes.modifiedCount > 0){
-            return true;
+        if(validateRes){
+            const changePassRes = await db_changeUserPassword(userId, newPassword)
+            console.log(changePassRes);
+            if(changePassRes.acknowledged && changePassRes.modifiedCount > 0){
+                return {result: true, status: 200};
+            }else{
+                return {result: false, status: 400};
+            }
         }else{
-            return false
+            return {result: false, status: 401}
         }
+        
     }catch(e){
         throw e;
     }
