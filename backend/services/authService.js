@@ -68,5 +68,6 @@ module.exports = {
     checkCredentials,
     generateToken,
     validateToken,
-    changePassword
+    changePassword,
+    JWTSECRET
 }
