@@ -1,14 +1,21 @@
 import { Injectable } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { catchError, map, of, switchMap, tap, withLatestFrom } from "rxjs";
+import { BasicPopupComponent, BasicPopupType } from "src/app/modules/shared/components/basic-popup/basic-popup.component";
 import { MeanerApiService } from "src/app/services/meanerApi.service";
 import { selectUser } from "../user/user.selector";
 import { changePassword, changePasswordFailure, changePasswordSuccess } from "./settings.action";
 
 @Injectable()
 export class SettingsEffects {
-    constructor(private actions$: Actions, private store: Store, private meanerService: MeanerApiService){}
+    constructor(
+        private actions$: Actions,
+        private store: Store,
+        private meanerService: MeanerApiService,
+        private snackbar: MatSnackBar,
+    ){}
 
 
     changePassword$ = createEffect(() =>
@@ -39,5 +46,39 @@ export class SettingsEffects {
             }),
             tap(console.log)
         )
+    )
+
+    changePasswordSuccess$ = createEffect(() => 
+            this.actions$.pipe(
+                ofType(changePasswordSuccess),
+                tap(() => {
+                    this.snackbar.openFromComponent(BasicPopupComponent, {
+                        data: {
+                            type: BasicPopupType.POPUP_SUCCESS,
+                            message: 'Success!'
+                        }
+                    })
+                })
+            ),
+            {
+                dispatch: false
+            }
+    )
+
+    changePasswordFailure$ = createEffect(() => 
+            this.actions$.pipe(
+                ofType(changePasswordFailure),
+                tap(() => {
+                    this.snackbar.openFromComponent(BasicPopupComponent, {
+                        data: {
+                            type: BasicPopupType.POPUP_FAILURE,
+                            message: 'Failed to change password. Please try again later.'
+                        }
+                    })
+                })
+            ),
+            {
+                dispatch: false
+            }
     )
 }

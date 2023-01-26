@@ -15,6 +15,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { BasicPopupComponent } from './components/basic-popup/basic-popup.component';
 
 
 
@@ -30,6 +32,7 @@ const materialsModules = [
   MatFormFieldModule,
   MatButtonModule,
   MatIconModule,
+  MatSnackBarModule,
 ]
 
 @NgModule({
@@ -37,6 +40,7 @@ const materialsModules = [
     ...exportComponents,
     TweetFormComponent,
     UserPinComponent,
+    BasicPopupComponent,
   ],
   imports: [
     ...materialsModules,
@@ -51,6 +55,9 @@ const materialsModules = [
     ...materialsModules,
     ...exportComponents
   ],
-  providers: [...exportComponents]
+  providers: [
+    ...exportComponents,
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 1500}}
+  ]
 })
 export class SharedModule { }
