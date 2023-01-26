@@ -1,0 +1,12 @@
+
+<span [ngClass]="this.getClass()" class="popup-content" matSnackBarLabel>
+    {{message}}
+</span>
+<span matSnackBarActions>
+    <button mat-icon-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">
+        <mat-icon [inline]="true">
+            close
+        </mat-icon>
+    </button>
+</span>
+
