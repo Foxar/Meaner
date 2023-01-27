@@ -2,11 +2,12 @@ const tweetService = require('../services/tweetService');
 
 const getHomeTweets = async (req,res,next) => {
     const {offset} = req.params;
+    const token = req.headers['authorization'];
 
     console.log("Get all tweets");
 
     try {
-        const tweets = await tweetService.fetchHomeTweets(offset);
+        const tweets = await tweetService.fetchHomeTweets(offset,token);
         res.status(200).json(tweets);
     }catch(e){
         res.sendStatus(500);
@@ -120,9 +121,10 @@ const getProfileByUserId = async (req,res,next) => {
 }
 
 const likeTweet = async(req,res,next) => {
-    const {userId, tweetId} = req.params;
+    const {id} = req.params;
+    const token = req.headers['authorization'];
     try{
-        await tweetService.switchTweetLike(userId, tweetId)
+        await tweetService.switchTweetLike(id, token)
         res.sendStatus(200);
     }catch(e){
         next(e);

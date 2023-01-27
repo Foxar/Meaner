@@ -10,11 +10,23 @@
             <a [routerLink]="'/profile/'+tweet.authorId" routerLinkActive="active">{{tweet.authorName}}</a>
         </div>
         <div class="content">
-            <a routerLink="{{'/tweet/'+tweet.id}}" >
-            <p>{{tweet.content}}</p>
-            <p>{{tweet.date.toLocaleString()}}
-            Likes: {{tweet.likes}} Shares: {{tweet.shares}} Replies: {{tweet.replies}}</p>
-            </a>
+            
+                <p>{{tweet.content}}</p>
+                <div class="actions">
+                    <div>{{tweet.date.toLocaleString()}}</div>
+                    <div class="likes">
+                        <button mat-icon-button color="secondary" (click)="like($event)" type="button"> 
+                            <mat-icon >{{tempLiked?'favorite':'favorite_border'}}</mat-icon> 
+                        </button> {{tweet.likes}}
+                    </div>
+                    <div class="shares">
+                        Shares: {{tweet.shares}}
+                    </div>
+                    <div class="replies">
+                        Replies: {{tweet.replies}}
+                    </div>
+                </div>
+            
         </div>
     </div>
 </div>

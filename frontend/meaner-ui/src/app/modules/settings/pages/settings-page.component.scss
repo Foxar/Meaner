@@ -58,7 +58,7 @@ a.settings-category-link {
     }
 
     &.selected-category {
-        border-right-color: mat-color($meaner-primary)
+        border-right-color: $primary;
     }
 
 }

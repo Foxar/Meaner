@@ -1,10 +1,27 @@
 const {db_insertTweetToUserLikes, db_findTweet, db_findTweets, db_insertTweet, db_findReplies, db_findUserTweets, db_findProfile, db_findUser, db_removeTweetFromUserLikes} = require('../db')
+const {JWTSECRET} = require('./authService');
+const jwt = require('jwt-simple')
 
 const TWEET_REQUEST_LIMIT = 10;
 
-const fetchHomeTweets = async(offset) => {
+const fetchHomeTweets = async(offset, authToken) => {
     try {
+        console.log("FETCH");
+        console.log(authToken);
+        let currentUserId;
+        let userLikes;
+        if(authToken)
+        {
+            const decodedJwt = jwt.decode(authToken,JWTSECRET)
+            console.log(decodedJwt);
+            let currentUser = await db_findUser({name: decodedJwt.login});
+            console.log(currentUser);
+            currentUserId = currentUser._id;
+            userLikes = currentUser.likedTweets;
+        }
+
         offset = parseInt(offset);
+        console.log(currentUserId);
         console.log("ASDF");
         console.log(offset);
         let tweets =  await db_findTweets({replyToId: null}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
@@ -13,7 +30,8 @@ const fetchHomeTweets = async(offset) => {
             let {_id, ...mappedTweet} = t
             return {
                 ...mappedTweet,
-                id: t._id
+                id: t._id,
+                liked: userLikes ? userLikes.some(ul => ul.toString() == t._id.toString()) : false,
             }
         })
         console.log(tweets);
@@ -90,10 +108,24 @@ const insertTweet = async(tweet) => {
     }
 }
 
-const switchTweetLike = async(userId, tweetId) => {
-    if(userId == undefined || tweetId == undefined)
+const switchTweetLike = async(tweetId, authToken) => {
+    console.log("switch tweet like");
+    console.log(tweetId);
+    console.log(authToken);
+
+    if(authToken == undefined || tweetId == undefined)
     {
         throw new Error("400")
+    }
+
+    let userId;
+    if(authToken)
+    {
+        const decodedJwt = jwt.decode(authToken,JWTSECRET)
+        console.log(decodedJwt);
+        let currentUser = await db_findUser({name: decodedJwt.login});
+        console.log(currentUser);
+        userId = currentUser._id;
     }
     
     try{

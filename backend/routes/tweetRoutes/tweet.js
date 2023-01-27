@@ -6,6 +6,7 @@ router
     .get('/home/:offset', tweetController.getHomeTweets)
     .get('/:id', tweetController.getTweet)
     .post('/', authController.authMiddleware, tweetController.postTweet)
+    .put('/like/:id', authController.authMiddleware, tweetController.likeTweet)
     .get('/replies/:id', tweetController.getReplies)
     .get('/user/:id', tweetController.getUserTweets)
     .get('/like/:userId/:tweetId', tweetController.likeTweet)
