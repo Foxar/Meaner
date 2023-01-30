@@ -16,8 +16,11 @@
                     <div>{{tweet.date.toLocaleString()}}</div>
                     <div class="likes">
                         <button mat-icon-button color="secondary" (click)="like($event)" type="button"> 
-                            <mat-icon >{{tempLiked?'favorite':'favorite_border'}}</mat-icon> 
-                        </button> {{tweet.likes}}
+                            <mat-icon >{{tweet.liked?'favorite':'favorite_border'}}</mat-icon> 
+                        </button> 
+                        <div>
+                            {{tweet.likes}}
+                        </div>
                     </div>
                     <div class="shares">
                         Shares: {{tweet.shares}}

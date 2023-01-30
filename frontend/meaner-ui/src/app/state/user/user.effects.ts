@@ -41,11 +41,6 @@ export class UserEffects {
         console.log("Validate JWT effect");
         return this.meanerService.validateJwt(action.jwt).pipe(
             tap(console.log),
-            /* map((loginResponse) => {
-                console.log(loginResponse);
-                console.log("returning loginsuccess");
-                return loginSuccess({loginResponse})
-            }), */
             map((loginResponse) => loginSuccess({loginResponse})),
             catchError((error) => {
                 console.log("error in validateJWT effect");

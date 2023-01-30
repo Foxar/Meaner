@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/state/app.state';
 import { HomeTweet } from 'src/app/state/home/home-tweet.model';
+import { likeTweet } from 'src/app/state/tweet-reactions/tweet-reactions.actions';
 
 @Component({
   selector: 'app-tweet',
@@ -9,9 +12,7 @@ import { HomeTweet } from 'src/app/state/home/home-tweet.model';
 export class TweetComponent implements OnInit {
   @Input() tweet!: HomeTweet;
 
-  tempLiked = false;
-
-  constructor() { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
     console.log("tweet oninit");
@@ -19,9 +20,9 @@ export class TweetComponent implements OnInit {
   }
 
   like(event: Event): void {
-    this.tempLiked = !this.tempLiked;
     event.stopPropagation();
     event.preventDefault();
+    this.store.dispatch(likeTweet({tweetId: this.tweet.id}));
   }
 
 }
