@@ -18,7 +18,9 @@ export class MeanerApiService {
     constructor(private http: HttpClient) {}
 
     getHomeTweets(offset:number = 0): Observable<HomeTweet[]>{
-        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/home/${offset}`).
+        const jwt = localStorage.getItem(STORAGE_JWT) || '';
+
+        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/home/${offset}`, {headers: new HttpHeaders({Authorization: jwt})}).
             pipe(
                 map(tweets => {
                     return tweets.map(t=>{
@@ -41,20 +43,23 @@ export class MeanerApiService {
     }
 
     getTweet(id: string): Observable<HomeTweet>{
+        const jwt = localStorage.getItem(STORAGE_JWT) || '';
 
-        return this.http.get<HomeTweet>(`${this.apiUrl}tweets/${id}`).pipe(
+        return this.http.get<HomeTweet>(`${this.apiUrl}tweets/${id}`,{headers: new HttpHeaders({Authorization: jwt})}).pipe(
             tap((a)=>{console.log("getTweet()");console.log(a)})
         )
     }
 
     getReplies(id: string): Observable<HomeTweet[]>{
-        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/replies/${id}`).pipe(
+        const jwt = localStorage.getItem(STORAGE_JWT) || '';
+        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/replies/${id}`,{headers: new HttpHeaders({Authorization: jwt})}).pipe(
             tap((a)=>{console.log("getReplies()");console.log(a)})
         )
     }
 
     getUserTweets(userId: string): Observable<HomeTweet[]>{
-        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/user/${userId}`).pipe(
+        const jwt = localStorage.getItem(STORAGE_JWT) || '';
+        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/user/${userId}`,{headers: new HttpHeaders({Authorization: jwt})}).pipe(
             tap((a)=>{console.log("getUserTweets()");console.log(a)})
         )
     }
@@ -92,6 +97,14 @@ export class MeanerApiService {
         let body = {userId, password: oldPassword, newPassword: password};
         return this.http.post(`${this.apiUrl}auth/changePassword`, body).pipe(
             tap((a)=>{console.log("postPasswordChange()");console.log(a)})
+        );
+    }
+
+    likeTweet(tweetId: string): Observable<{}> {
+        console.log("ee");
+        const jwt = localStorage.getItem(STORAGE_JWT) || '';
+        return this.http.put(`${this.apiUrl}tweets/like/${tweetId}`,{},{headers: new HttpHeaders({Authorization: jwt})}).pipe(
+            tap((a)=>{console.log("likeTweet()");})
         );
     }
 
