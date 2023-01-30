@@ -10,7 +10,7 @@ const fetchHomeTweets = async(offset, authToken) => {
         console.log(authToken);
         let currentUserId;
         let userLikes;
-        if(authToken)
+        if(authToken) //This block should be moved to some kind of middleware. Since this project is frontend-focused, this is optional.
         {
             const decodedJwt = jwt.decode(authToken,JWTSECRET)
             console.log(decodedJwt);
@@ -31,9 +31,11 @@ const fetchHomeTweets = async(offset, authToken) => {
             return {
                 ...mappedTweet,
                 id: t._id,
-                liked: userLikes ? userLikes.some(ul => ul.toString() == t._id.toString()) : false,
             }
-        })
+        });
+
+        tweets = tweets.map(t => mapTweetToLikedTweet(t,userLikes));
+
         console.log(tweets);
         return tweets;
     }catch(e) {
@@ -41,12 +43,26 @@ const fetchHomeTweets = async(offset, authToken) => {
     }
 }
 
-const fetchTweets = async(offset) => {
+const fetchTweets = async(offset, authToken) => {
     try {
+
+        let userLikes;
+        if(authToken)
+        {
+            const decodedJwt = jwt.decode(authToken,JWTSECRET)
+            console.log(decodedJwt);
+            let currentUser = await db_findUser({name: decodedJwt.login});
+            console.log(currentUser);
+            currentUserId = currentUser._id;
+            userLikes = currentUser.likedTweets;
+        }
+        
+
         offset = parseInt(offset);
         console.log("ASDF");
         console.log(offset);
         const tweets =  await db_findTweets({}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
+        tweets = tweets.map(t => mapTweetToLikedTweet(t,userLikes));
         console.log(tweets);
         return tweets;
     }catch(e) {
@@ -54,22 +70,48 @@ const fetchTweets = async(offset) => {
     }
 }
 
-const fetchTweet = async(id) => {
+const fetchTweet = async(id, authToken) => {
     try {
+
+        let userLikes;
+        if(authToken)
+        {
+            const decodedJwt = jwt.decode(authToken,JWTSECRET)
+            console.log(decodedJwt);
+            let currentUser = await db_findUser({name: decodedJwt.login});
+            console.log(currentUser);
+            currentUserId = currentUser._id;
+            userLikes = currentUser.likedTweets;
+        }
+
         let query = {_id: id};
         let t = await db_findTweet(query);
         let {_id, ...mappedTweet} = t
-        return {
+        let tweet = {
             ...mappedTweet,
             id: t._id
         }
+        return mapTweetToLikedTweet(tweet,userLikes)
     }catch(e) {
        throw e;
     }
 }
 
-const fetchUserTweets = async(id) => {
+const fetchUserTweets = async(id, authToken) => {
     try{
+
+        let userLikes;
+        if(authToken)
+        {
+            const decodedJwt = jwt.decode(authToken,JWTSECRET)
+            console.log(decodedJwt);
+            let currentUser = await db_findUser({name: decodedJwt.login});
+            console.log(currentUser);
+            currentUserId = currentUser._id;
+            userLikes = currentUser.likedTweets;
+        }
+
+
         let tweets = await db_findUserTweets({id: id});
         tweets = tweets.map(t=>{
             let {_id, ...mappedTweet} = t
@@ -78,15 +120,40 @@ const fetchUserTweets = async(id) => {
                 id: t._id
             }
         })
+
+        tweets = tweets.map(t => mapTweetToLikedTweet(t,userLikes));
         return tweets;
     }catch(e){
         throw e;
     }
 }
 
-const fetchReplies = async(id) => {
+const fetchReplies = async(id, authToken) => {
     try{
-        return tweet = await db_findReplies({id: id});
+
+        let userLikes;
+        if(authToken)
+        {
+            const decodedJwt = jwt.decode(authToken,JWTSECRET)
+            console.log(decodedJwt);
+            let currentUser = await db_findUser({name: decodedJwt.login});
+            console.log(currentUser);
+            currentUserId = currentUser._id;
+            userLikes = currentUser.likedTweets;
+        }
+
+        let tweets = await db_findReplies({id: id});
+        console.log(tweets);
+        
+        tweets = tweets.map(t=>{
+            let {_id, ...mappedTweet} = t
+            return {
+                ...mappedTweet,
+                id: t._id
+            }
+        })
+
+        return tweets.map(t => mapTweetToLikedTweet(t,userLikes))
     }catch(e){
         throw e;
     }
@@ -173,6 +240,13 @@ const fetchUserByName = async(userName) => {
         throw e;
     }
         
+}
+
+const mapTweetToLikedTweet  = (tweet, userLikes) => {
+    return {
+        ...tweet,
+        liked: userLikes ? userLikes.some(ul => ul.toString() == tweet.id.toString()) : false,
+    }   
 }
 
 /* 
