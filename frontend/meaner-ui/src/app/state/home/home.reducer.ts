@@ -1,5 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
-import { addTweet, addTweetFailure, addTweetSuccess, deleteTweet, loadMoreTweetsSuccess, loadTweets, loadTweetsFailure, loadTweetsSuccess, resetHomeState } from "./home.actions";
+import { tweetLikeUnlikeMapper } from "src/app/services/tweetLikeMapper";
+import { addTweet, addTweetFailure, addTweetSuccess, deleteTweet, homeLikeTweetReactionSuccess, loadMoreTweetsSuccess, loadTweets, loadTweetsFailure, loadTweetsSuccess, resetHomeState } from "./home.actions";
 import { HomeState, HomeStateStatus } from "./home.state";
 
 export const initialState: HomeState = {
@@ -32,7 +33,7 @@ export const homeReducer = createReducer(
     })),
     
     on(loadTweets, (state: HomeState, {append}) => {
-        return ({...state, status: append?HomeStateStatus.LOADING_MORE:HomeStateStatus.LOADING})
+    return ({...state, status: append?HomeStateStatus.LOADING_MORE:HomeStateStatus.LOADING})
     }),
     on(loadTweetsSuccess, (state: HomeState, {tweets}) => {
         console.log("loadtweets succ");
@@ -45,5 +46,21 @@ export const homeReducer = createReducer(
         return ({...state, tweets: [...state.tweets, ...tweets], status: HomeStateStatus.SUCCESS, error: null});
     }),
     on(loadTweetsFailure, (state: HomeState, {error}) => ({...state, status: HomeStateStatus.ERROR, error: error})),
-    on(resetHomeState, (state: HomeState) => ({...initialState}))
+    on(resetHomeState, (state: HomeState) => ({...initialState})),
+    on(homeLikeTweetReactionSuccess, (state: HomeState, {tweetId}) => {
+        let mappedTweets = state.tweets.map(t => {
+            if(t.id == tweetId){
+                return tweetLikeUnlikeMapper(t);
+            }else {
+                return {...t}
+            }
+        })
+        return ({
+            ...state,
+            tweets: [
+                ...mappedTweets,
+            ]
+        })
+        
+    } )
 )

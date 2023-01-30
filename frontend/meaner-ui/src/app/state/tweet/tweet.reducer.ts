@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
-import { HomeTweet } from "../home/home-tweet.model";
-import { loadReplies, loadRepliesFailure, loadRepliesSuccess, loadTweet, loadTweetFailure, loadTweetSuccess, postReply, postReplyFailure, postReplySuccess, resetTweetState } from "./tweet.actions";
+import { tweetLikeUnlikeMapper } from "src/app/services/tweetLikeMapper";
+import { loadReplies, loadRepliesFailure, loadRepliesSuccess, loadTweet, loadTweetFailure, loadTweetSuccess, postReply, postReplyFailure, postReplySuccess, resetTweetState, tweetLikeTweetReactionSuccess } from "./tweet.actions";
 import { TweetState, TweetStateStatus } from "./tweet.state";
 
 export const initialState: TweetState = {
@@ -59,5 +59,29 @@ export const tweetReducer = createReducer(
     on(resetTweetState, (state: TweetState) => ({
         ...initialState
     })),
+    on(tweetLikeTweetReactionSuccess, (state: TweetState, {tweetId}) => {
+        if(state.tweet!.id == tweetId){
+            let mappedTweet = tweetLikeUnlikeMapper(state.tweet!);
+            return ({
+                ...state,
+                tweet: mappedTweet,
+            })
+
+        }else {
+            let mappedReplies = state.replies.map(t => {
+                if(t.id == tweetId){
+                    return tweetLikeUnlikeMapper(t);
+                }else {
+                    return {...t}
+                }
+            })
+            return ({
+                ...state,
+                replies: [
+                    ...mappedReplies,
+                ]
+            })
+        }
+    } ),
     
 )

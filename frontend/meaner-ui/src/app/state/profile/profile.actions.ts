@@ -40,4 +40,9 @@ export const loadProfileTweetsFailure = createAction(
     props<{error: string}>()
 );
 
+export const profileLikeTweetReactionSuccess = createAction(
+    '[Profile] Like tweet success',
+    props<{tweetId: string}>()
+)
+
 export const resetProfileState = createAction('[Profile] Reset profile state');

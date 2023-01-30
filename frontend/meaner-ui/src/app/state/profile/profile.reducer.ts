@@ -1,5 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
-import { loadProfile, loadProfileBlocked, loadProfileFailure, loadProfileSuccess, loadProfileTweets, loadProfileTweetsFailure, loadProfileTweetsSuccess, resetProfileState } from "./profile.actions";
+import { tweetLikeUnlikeMapper } from "src/app/services/tweetLikeMapper";
+import { loadProfile, loadProfileBlocked, loadProfileFailure, loadProfileSuccess, loadProfileTweets, loadProfileTweetsFailure, loadProfileTweetsSuccess, profileLikeTweetReactionSuccess, resetProfileState } from "./profile.actions";
 import { ProfileState, ProfileStateStatus } from "./profile.state";
 
 export const initialState: ProfileState  ={
@@ -44,4 +45,20 @@ export const profileReducer = createReducer(
         status: ProfileStateStatus.ERROR_TWEETS,
     })),
     on(resetProfileState, (state: ProfileState) => (initialState)),
+    on(profileLikeTweetReactionSuccess, (state: ProfileState, {tweetId}) => {
+        let mappedTweets = state.tweets.map(t => {
+            if(t.id == tweetId){
+                return tweetLikeUnlikeMapper(t);
+            }else {
+                return {...t}
+            }
+        })
+        return ({
+            ...state,
+            tweets: [
+                ...mappedTweets,
+            ]
+        })
+        
+    } )
 )
