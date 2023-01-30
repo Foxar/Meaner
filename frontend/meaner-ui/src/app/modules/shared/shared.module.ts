@@ -17,6 +17,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { BasicPopupComponent } from './components/basic-popup/basic-popup.component';
+import { tweetReactionsReducer } from 'src/app/state/tweet-reactions/tweet-reactions.reducer';
+import { TweetReactionsEffects } from 'src/app/state/tweet-reactions/tweet-reactions.effects';
 
 
 
@@ -49,7 +51,8 @@ const materialsModules = [
     CommonModule,
     ReactiveFormsModule,
     StoreModule.forFeature("reducer", userReducer),
-    EffectsModule.forFeature([UserEffects])
+    StoreModule.forFeature("tweetReactions", tweetReactionsReducer),
+    EffectsModule.forFeature([UserEffects, TweetReactionsEffects])
   ],
   exports: [
     ...materialsModules,
