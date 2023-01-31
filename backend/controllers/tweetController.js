@@ -17,11 +17,12 @@ const getHomeTweets = async (req,res,next) => {
 
 const getAllTweets = async (req,res,next) => {
     const {offset} = req.params;
+    const token = req.headers['authorization'];
 
     console.log("Get all tweets");
 
     try {
-        const tweets = await tweetService.fetchTweets(offset);
+        const tweets = await tweetService.fetchTweets(offset,token);
         res.status(200).json(tweets);
     }catch(e){
         res.sendStatus(500);
@@ -31,9 +32,10 @@ const getAllTweets = async (req,res,next) => {
 
 const getTweet = async (req,res,next) => {
     const {id} = req.params;
+    const token = req.headers['authorization'];
 
     try{
-        const tweet = await tweetService.fetchTweet(id);
+        const tweet = await tweetService.fetchTweet(id,token);
         if(tweet == null)
             throw new Error("No tweet found");
         else
@@ -46,9 +48,10 @@ const getTweet = async (req,res,next) => {
 
 const getUserTweets = async(req,res,next) => {
     const {id} = req.params;
+    const token = req.headers['authorization'];
 
     try {
-        const tweets = await tweetService.fetchUserTweets(id);
+        const tweets = await tweetService.fetchUserTweets(id,token);
         if(tweets == null || tweets.length == 0)
             res.sendStatus(404);
         else
@@ -60,9 +63,10 @@ const getUserTweets = async(req,res,next) => {
 
 const getReplies = async(req,res,next) => {
     const {id} = req.params;
+    const token = req.headers['authorization'];
 
     try {
-        const replies = await tweetService.fetchReplies(id);
+        const replies = await tweetService.fetchReplies(id,token);
         res.status(200).json(replies);
     }catch(e){
         next(e);
@@ -125,7 +129,7 @@ const likeTweet = async(req,res,next) => {
     const token = req.headers['authorization'];
     try{
         await tweetService.switchTweetLike(id, token)
-        res.sendStatus(200);
+        res.status(200).json();
     }catch(e){
         next(e);
     }

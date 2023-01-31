@@ -32,22 +32,19 @@ export class MeanerApiService {
     };
 
     postTweet(tweet: PostTweet): Observable<HomeTweet> {
-        const jwt = localStorage.getItem(STORAGE_JWT) || '';
-
         console.log(tweet);
-        return this.http.post<HomeTweet>(`${this.apiUrl}tweets/`,tweet,{headers: new HttpHeaders({Authorization: jwt})}).pipe(
+        return this.http.post<HomeTweet>(`${this.apiUrl}tweets/`,tweet).pipe(
             delay(this.apiDelay)
         )
     }
 
     getTweet(id: string): Observable<HomeTweet>{
-
         return this.http.get<HomeTweet>(`${this.apiUrl}tweets/${id}`).pipe(
             tap((a)=>{console.log("getTweet()");console.log(a)})
         )
     }
 
-    getReplies(id: string): Observable<HomeTweet[]>{
+    getReplies(id: string): Observable<HomeTweet[]>{ 
         return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/replies/${id}`).pipe(
             tap((a)=>{console.log("getReplies()");console.log(a)})
         )
@@ -60,7 +57,6 @@ export class MeanerApiService {
     }
 
     postLogin(name: string, password: string): Observable<LoginResponse> {
-
         let body: LoginBody = {login: name, password};
         return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, body).pipe(
             tap((a)=>{console.log("postLogin()");console.log(a)})
@@ -92,6 +88,13 @@ export class MeanerApiService {
         let body = {userId, password: oldPassword, newPassword: password};
         return this.http.post(`${this.apiUrl}auth/changePassword`, body).pipe(
             tap((a)=>{console.log("postPasswordChange()");console.log(a)})
+        );
+    }
+
+    likeTweet(tweetId: string): Observable<{}> {
+        console.log("ee");
+        return this.http.put(`${this.apiUrl}tweets/like/${tweetId}`,{}).pipe(
+            tap((a)=>{console.log("likeTweet()");})
         );
     }
 

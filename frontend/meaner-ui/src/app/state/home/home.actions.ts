@@ -41,6 +41,11 @@ export const loadTweetsFailure = createAction(
     props<{error: string}>()
 );
 
+export const homeLikeTweetReactionSuccess = createAction(
+    '[Home] Like tweet success',
+    props<{tweetId: string}>()
+)
+
 export const resetHomeState = createAction('[Home] Reset home state');
 
 

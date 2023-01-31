@@ -5,6 +5,7 @@ export interface HomeTweet {
     id: string;
     date: Date;
     likes: number;
+    liked: boolean;
     replies: number;
     shares: number;
     replyToId: string | null;

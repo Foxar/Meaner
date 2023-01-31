@@ -25,7 +25,7 @@ const postLogin = async(req,res,next) => {
 
 const validateToken = async(req,res,next) => {
     const token = req.headers['authorization'];
-    if(token){
+if(token){
         const validationRes = await authService.validateToken(token);
         console.log(validationRes);
         if(validationRes){

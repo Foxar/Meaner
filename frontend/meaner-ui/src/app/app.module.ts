@@ -13,6 +13,7 @@ import { appReducer } from './state/app.state';
 import { UserEffects } from './state/user/user.effects';
 import { LoginGuardService } from './auth/login-guard.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { httpInterceptorProviders } from './interceptors';
 
 const routes: Routes = [
   {
@@ -51,7 +52,10 @@ const routes: Routes = [
     EffectsModule.forRoot([HomeEffects]),
     
   ],
-  providers: [LoginGuardService],
+  providers: [
+    LoginGuardService,
+    httpInterceptorProviders,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

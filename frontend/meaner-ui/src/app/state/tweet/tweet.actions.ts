@@ -53,5 +53,10 @@ export const postReplyFailure = createAction(
     props<{error: string}>()
 )
 
+export const tweetLikeTweetReactionSuccess = createAction(
+    '[Tweet] Like tweet success',
+    props<{tweetId: string}>()
+)
+
 //RESET TWEET STATE 
 export const resetTweetState = createAction('[Tweet] Reset tweet state')
