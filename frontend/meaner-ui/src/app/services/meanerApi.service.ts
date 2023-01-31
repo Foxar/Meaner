@@ -7,6 +7,7 @@ import { HomeTweet } from "../state/home/home-tweet.model";
 import { Profile, ProfileResponse } from "../state/profile/profile.model";
 import { LoginResponse } from "../state/user/user.model";
 import { LoginBody } from "./apiModels";
+import { tweetStringDateMapper } from "./tweetStringDateMapper";
 
 @Injectable({providedIn: 'root'})
 export class MeanerApiService {
@@ -21,20 +22,20 @@ export class MeanerApiService {
         return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/home/${offset}`).
             pipe(
                 map(tweets => {
-                    return tweets.map(t=>{
-                        return {
-                            ...t,
-                            date: new Date(t.date),
-                        }
-                    });
+                    console.log(tweets);
+                    return tweets.map(tweetStringDateMapper);
                 }),
+                tap(console.log)
             )
     };
 
     postTweet(tweet: PostTweet): Observable<HomeTweet> {
         console.log(tweet);
         return this.http.post<HomeTweet>(`${this.apiUrl}tweets/`,tweet).pipe(
-            delay(this.apiDelay)
+            delay(this.apiDelay),
+            map(tweet => {
+                return tweetStringDateMapper(tweet);
+            })
         )
     }
 
