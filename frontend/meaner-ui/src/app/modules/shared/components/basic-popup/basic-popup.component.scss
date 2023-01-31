@@ -1,6 +1,8 @@
-.mat-snack-bar-container {
+.mdc-snackbar__surface {
     padding: 7px 16px;
-    color: whitesmoke;
+    .mat-mdc-snack-bar-label{
+        color: whitesmoke !important;
+    }
     &:has(.popup-failed) {
         background-color: #C62828;
     }
@@ -13,7 +15,6 @@
         gap: 15px;
         justify-content: space-between;
         vertical-align: middle;
-        line-height: 40px;
     }
 }
 
