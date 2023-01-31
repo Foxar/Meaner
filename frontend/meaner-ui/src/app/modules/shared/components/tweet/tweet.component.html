@@ -10,7 +10,7 @@
             <a [routerLink]="'/profile/'+tweet.authorId" routerLinkActive="active">{{tweet.authorName}}</a>
         </div>
         <div class="content">
-            
+            <a [routerLink]="'/tweet/'+tweet.id" routerLinkActive="active">
                 <p>{{tweet.content}}</p>
                 <div class="actions">
                     <div>{{tweet.date.toLocaleString()}}</div>
@@ -29,7 +29,7 @@
                         Replies: {{tweet.replies}}
                     </div>
                 </div>
-            
+            </a>
         </div>
     </div>
 </div>

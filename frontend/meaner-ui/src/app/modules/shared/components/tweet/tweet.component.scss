@@ -1,4 +1,7 @@
 .homeTweet {
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.045);
+    }
     padding: 15px;
     display: flex;
     .right {
@@ -35,6 +38,9 @@
     .author {
         font-size: 18px;
         margin: 0;
+        a:hover {
+            text-decoration: underline;
+        }
     }
     box-sizing: border-box;
     border: solid rgb(47, 51, 54) 1px;
