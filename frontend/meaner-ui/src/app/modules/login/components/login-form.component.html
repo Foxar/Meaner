@@ -1,12 +1,25 @@
 <div class="loginForm">
-    <p>Username:</p>
-    <input type="text" class="loginInput" [formControl]="loginControl">
-    <p>Password:</p>
-    <input type="password" class="passwordInput" [formControl]="passwordControl">
-    <button (click)="login()">Login</button>
-
-    <div *ngIf="status == 'LOGGING_IN'">
-        Logging in ...
-    </div>
+    <form [formGroup]="this.loginForm">
+        <h1>Please log in.</h1>
+        <mat-form-field class="formfield"  appearance="outline" [hideRequiredMarker]="true">
+            <mat-label>Login</mat-label>
+            <input matInput type="text" class="loginInput" formControlName="login">
+            <mat-error *ngIf="this.loginForm.controls['login'].hasError('required')">
+                Required
+            </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field class="formfield"  appearance="outline" [hideRequiredMarker]="true">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" class="passwordInput" formControlName="password">
+            <mat-error *ngIf="this.loginForm.controls['password'].hasError('required')">
+                Required
+            </mat-error>
+        </mat-form-field>
+        <mat-error *ngIf="this.loginForm.hasError('badLogin')">
+            Invalid credentials, please try again.
+        </mat-error>
+        <button mat-flat-button color="primary" (click)="login()" type="button">Login</button>
+    </form>
 
 </div>

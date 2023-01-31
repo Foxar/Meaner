@@ -10,12 +10,7 @@ import { selectUserError, selectUserStatus } from 'src/app/state/user/user.selec
     styleUrls: ['./login-page.component.scss']
   })
   export class LoginPageComponent implements OnInit {
-    constructor (private store: Store<AppState>) {}
-
-
-    loginStatus$ = this.store.select(selectUserStatus).pipe(tap(console.log));
-    loginError$ = this.store.select(selectUserError).pipe(tap(console.log));
-
+    constructor () {}
 
     ngOnInit(): void {
         
