@@ -168,7 +168,12 @@ const insertTweet = async(tweet) => {
     });
     
     try{
-        return await db_insertTweet(tweet);
+        let insertedTweet = await db_insertTweet(tweet);
+        let {_id, ...mappedTweet} = insertedTweet
+        return {
+            ...mappedTweet,
+            id: insertedTweet._id
+        }
     }catch(e) {
         console.error(e);
         throw e;
