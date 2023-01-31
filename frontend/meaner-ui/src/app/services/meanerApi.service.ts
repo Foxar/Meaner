@@ -18,9 +18,7 @@ export class MeanerApiService {
     constructor(private http: HttpClient) {}
 
     getHomeTweets(offset:number = 0): Observable<HomeTweet[]>{
-        const jwt = localStorage.getItem(STORAGE_JWT) || '';
-
-        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/home/${offset}`, {headers: new HttpHeaders({Authorization: jwt})}).
+        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/home/${offset}`).
             pipe(
                 map(tweets => {
                     return tweets.map(t=>{
@@ -34,38 +32,31 @@ export class MeanerApiService {
     };
 
     postTweet(tweet: PostTweet): Observable<HomeTweet> {
-        const jwt = localStorage.getItem(STORAGE_JWT) || '';
-
         console.log(tweet);
-        return this.http.post<HomeTweet>(`${this.apiUrl}tweets/`,tweet,{headers: new HttpHeaders({Authorization: jwt})}).pipe(
+        return this.http.post<HomeTweet>(`${this.apiUrl}tweets/`,tweet).pipe(
             delay(this.apiDelay)
         )
     }
 
     getTweet(id: string): Observable<HomeTweet>{
-        const jwt = localStorage.getItem(STORAGE_JWT) || '';
-
-        return this.http.get<HomeTweet>(`${this.apiUrl}tweets/${id}`,{headers: new HttpHeaders({Authorization: jwt})}).pipe(
+        return this.http.get<HomeTweet>(`${this.apiUrl}tweets/${id}`).pipe(
             tap((a)=>{console.log("getTweet()");console.log(a)})
         )
     }
 
-    getReplies(id: string): Observable<HomeTweet[]>{
-        const jwt = localStorage.getItem(STORAGE_JWT) || '';
-        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/replies/${id}`,{headers: new HttpHeaders({Authorization: jwt})}).pipe(
+    getReplies(id: string): Observable<HomeTweet[]>{ 
+        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/replies/${id}`).pipe(
             tap((a)=>{console.log("getReplies()");console.log(a)})
         )
     }
 
     getUserTweets(userId: string): Observable<HomeTweet[]>{
-        const jwt = localStorage.getItem(STORAGE_JWT) || '';
-        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/user/${userId}`,{headers: new HttpHeaders({Authorization: jwt})}).pipe(
+        return this.http.get<HomeTweet[]>(`${this.apiUrl}tweets/user/${userId}`).pipe(
             tap((a)=>{console.log("getUserTweets()");console.log(a)})
         )
     }
 
     postLogin(name: string, password: string): Observable<LoginResponse> {
-
         let body: LoginBody = {login: name, password};
         return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, body).pipe(
             tap((a)=>{console.log("postLogin()");console.log(a)})
@@ -102,8 +93,7 @@ export class MeanerApiService {
 
     likeTweet(tweetId: string): Observable<{}> {
         console.log("ee");
-        const jwt = localStorage.getItem(STORAGE_JWT) || '';
-        return this.http.put(`${this.apiUrl}tweets/like/${tweetId}`,{},{headers: new HttpHeaders({Authorization: jwt})}).pipe(
+        return this.http.put(`${this.apiUrl}tweets/like/${tweetId}`,{}).pipe(
             tap((a)=>{console.log("likeTweet()");})
         );
     }
