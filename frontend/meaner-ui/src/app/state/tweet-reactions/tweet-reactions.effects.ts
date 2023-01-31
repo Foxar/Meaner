@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { switchMap, map, catchError, of, tap } from "rxjs";
+import { BasicPopupComponent, BasicPopupType } from "src/app/modules/shared/components/basic-popup/basic-popup.component";
 import { MeanerApiService } from "src/app/services/meanerApi.service";
 import { AppState } from "../app.state";
 import { homeLikeTweetReactionSuccess } from "../home/home.actions";
@@ -17,6 +19,7 @@ export class TweetReactionsEffects {
     private store: Store<AppState>,
     private meanerService: MeanerApiService,
     private router: Router,
+    private snackbar: MatSnackBar,
   ) {}
 
   likeTweet$ = createEffect(() => 
@@ -52,6 +55,22 @@ export class TweetReactionsEffects {
                 console.log("HomeState like");
             }
         })
+    ))
+
+    likeTweetFailure = createEffect(() => 
+    this.actions$.pipe(
+        ofType(likeTweetFailure),
+        tap((action) => {
+            console.error(action.error);
+            this.snackbar.openFromComponent(BasicPopupComponent, {
+                data: {
+                    type: BasicPopupType.POPUP_FAILURE,
+                    message: 'Something went wrong. Please try again later.'
+                }
+            })
+        })
     ),
-    )
+    {
+        dispatch: false
+    })
 }
