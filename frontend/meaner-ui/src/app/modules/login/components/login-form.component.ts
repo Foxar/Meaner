@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngrx/store";
-import { Observable, tap } from "rxjs";
+import { tap } from "rxjs";
 import { AppState } from "src/app/state/app.state";
 import { login } from "src/app/state/user/user.actions";
-import { selectUserStatus, selectUserError } from "src/app/state/user/user.selector";
+import { selectUserStatus } from "src/app/state/user/user.selector";
 import { UserStateStatus } from "src/app/state/user/user.state";
 
 @Component({
@@ -12,7 +12,7 @@ import { UserStateStatus } from "src/app/state/user/user.state";
     templateUrl: './login-form.component.html',
     styleUrls: ['./login-form.component.scss']
   })
-export class LoginFormComponent implements OnInit, OnDestroy {
+export class LoginFormComponent implements OnDestroy {
     constructor(
         private store: Store<AppState>,
         private fb: FormBuilder,
@@ -49,9 +49,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         })
     ).subscribe();
     
-    ngOnInit(): void {
-    }
-
 
     login() {
         this.store.dispatch(login({credentials: {

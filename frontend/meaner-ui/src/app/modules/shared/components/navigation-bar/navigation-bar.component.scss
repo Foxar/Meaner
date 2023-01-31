@@ -1,12 +1,12 @@
 .navbar{
     
-    
+    display: flex;
     margin: 5vh 0;
     font-size: x-large;
     font-weight: 200;
     line-height: 40px;
     flex-direction: row-reverse;
-    display: inline-block;
+    
     ul{
         padding: 0 5vw;
         list-style: none;

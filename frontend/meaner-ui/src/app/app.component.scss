@@ -1,7 +1,17 @@
+
+:has(.appContainer) {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: nowrap;
+    
+}
 .appContainer {
     color: whitesmoke;    
-    width: min-content;
-    margin: 0 auto;
+    display: flex;
+    flex-shrink: 0;
+    
+    
     
     --navbarWidth: 18vw;
 
@@ -11,7 +21,8 @@
     .navigationBar {
         box-sizing: content-box;
         height: 100%;
-        
+        flex-basis: var(--navbarWidth);
+        flex-shrink: 0;
         border-right:solid rgb(47, 51, 54) 1px;
         position: fixed;
         width: var(--navbarWidth);
@@ -20,9 +31,9 @@
         box-sizing: border-box;
         border:solid rgb(47, 51, 54) 1px;
         margin-left: var(--navbarWidth);
-        
+        flex-grow:2;
         margin-right: 0;
-        min-width: 600px;
+        
         
     }
 

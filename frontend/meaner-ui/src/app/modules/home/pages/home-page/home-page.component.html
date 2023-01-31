@@ -1,4 +1,4 @@
-<div class="appContent homePage">
+<div class="homePage">
     <div class="tweetContainer">
         <h2>Home</h2>
         <app-tweet-form [status]="tweetStatus" *ngIf="(this.userStatus$ | async) == 'LOGGED_IN'"></app-tweet-form>
