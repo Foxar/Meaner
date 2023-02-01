@@ -5,7 +5,7 @@ import { STORAGE_JWT } from "../constants/constants";
 import { PostTweet } from "../modules/shared/models/tweetModels";
 import { HomeTweet } from "../state/home/home-tweet.model";
 import { Profile, ProfileResponse } from "../state/profile/profile.model";
-import { LoginResponse } from "../state/user/user.model";
+import { LoginResponse, SignupRequest } from "../state/user/user.model";
 import { LoginBody } from "./apiModels";
 import { tweetStringDateMapper } from "./tweetStringDateMapper";
 
@@ -62,6 +62,12 @@ export class MeanerApiService {
         return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, body).pipe(
             tap((a)=>{console.log("postLogin()");console.log(a)})
         )        
+    }
+
+    postSignup(credentials: SignupRequest): Observable<{}>{
+        return this.http.post(`${this.apiUrl}/auth/signup`, credentials).pipe(
+            tap((a)=>{console.log("postSignup()");console.log(a)})
+        )
     }
 
     validateJwt(jwtToCheck: string): Observable<LoginResponse> {
