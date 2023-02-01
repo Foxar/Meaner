@@ -6,7 +6,7 @@ import { switchMap, map, catchError, of, tap } from "rxjs";
 import { STORAGE_JWT } from "src/app/constants/constants";
 import { MeanerApiService } from "src/app/services/meanerApi.service";
 import { AppState } from "../app.state";
-import { login, loginFailed, loginSuccess, resetUser, validateJwt, validateJwtFailed } from "./user.actions";
+import { login, loginFailed, loginSuccess, resetUser, signup, signupFailed, signupSuccess, validateJwt, validateJwtFailed } from "./user.actions";
 
 @Injectable()
 export class UserEffects {
@@ -31,6 +31,25 @@ export class UserEffects {
                 return of (loginFailed({error}))
             })
         )
+    })
+  ));
+
+
+  signup$ = createEffect(() => 
+  this.actions$.pipe(
+    ofType(signup),
+    switchMap((action) => {
+      console.log(action);
+      return this.meanerService.postSignup(action.credentials).pipe(
+        tap(console.log),
+        map((signupResponse) => {
+          return signupSuccess()
+        }),
+        catchError((error) => {
+          console.error(error);
+          return of (signupFailed)
+        })
+      );
     })
   ));
 
