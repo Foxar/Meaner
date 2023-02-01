@@ -1,7 +1,17 @@
-const { db_findUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword } = require("../db")
+const { db_insertUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword } = require("../db")
 const jwt = require('jwt-simple')
 
 const JWTSECRET = 'somesecret';
+
+
+const addUser = async(user) => {
+    try {
+        const dbres = await db_insertUser(user);
+        return dbres;
+    }catch(e) {
+        return e;
+    }
+}
 
 const checkCredentials = async(login,password) => {
     try{
@@ -69,5 +79,6 @@ module.exports = {
     generateToken,
     validateToken,
     changePassword,
+    addUser,
     JWTSECRET
 }

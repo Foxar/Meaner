@@ -1,6 +1,13 @@
 const authService = require('../services/authService')
 const tweetService = require('../services/tweetService')
 
+
+const postSignup = async(req,res,next) => {
+    const cred = req.body;
+    const user = await authService.addUser(cred);
+    res.status(201).json(user);
+}
+
 const postLogin = async(req,res,next) => {
     const creds = req.body;
     console.log(creds);
@@ -70,6 +77,7 @@ const changePassword = async(req,res,next) => {
 }
 
 module.exports = {
+    postSignup,
     postLogin,
     validateToken,
     authMiddleware,
