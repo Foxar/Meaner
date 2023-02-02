@@ -4,8 +4,8 @@
         <h4 class="username">{{user.name}}</h4>
         <button mat-flat-button color="secondary" (click)="logout()">Log out</button>
     </div>
-    <div *ngIf="!user">
-        
+    <div *ngIf="!user" class="signInButtons">
         <a mat-flat-button color="primary" routerLink="/login">Login</a>
+        <a mat-flat-button color="primary" routerLink="/signup">Sign up</a>
     </div>
 </div>
