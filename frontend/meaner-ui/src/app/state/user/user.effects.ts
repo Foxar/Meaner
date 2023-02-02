@@ -47,7 +47,7 @@ export class UserEffects {
         }),
         catchError((error) => {
           console.error(error);
-          return of (signupFailed)
+          return of (signupFailed({error}))  
         })
       );
     })
