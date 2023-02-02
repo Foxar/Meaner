@@ -1,9 +1,11 @@
 import { Injectable } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { switchMap, map, catchError, of, tap } from "rxjs";
 import { STORAGE_JWT } from "src/app/constants/constants";
+import { BasicPopupComponent, BasicPopupType } from "src/app/modules/shared/components/basic-popup/basic-popup.component";
 import { MeanerApiService } from "src/app/services/meanerApi.service";
 import { AppState } from "../app.state";
 import { login, loginFailed, loginSuccess, resetUser, signup, signupFailed, signupSuccess, validateJwt, validateJwtFailed } from "./user.actions";
@@ -14,7 +16,8 @@ export class UserEffects {
     private actions$: Actions,
     private store: Store<AppState>,
     private meanerService: MeanerApiService,
-    private router: Router
+    private router: Router,
+    private snackbar: MatSnackBar,
   ) {}
   
   login$ = createEffect(() => 
@@ -52,6 +55,33 @@ export class UserEffects {
       );
     })
   ));
+
+  signupSuccess$ = createEffect(() => 
+  this.actions$.pipe(
+    ofType(signupSuccess),
+    tap(() => {
+      this.router.navigate(['/login']);
+    })
+  ),
+  {
+    dispatch: false
+  })
+
+  signupFailed$ = createEffect(() => 
+  this.actions$.pipe(
+    ofType(signupFailed),
+    tap(() => {
+      this.snackbar.openFromComponent(BasicPopupComponent, {
+        data: {
+            type: BasicPopupType.POPUP_FAILURE,
+            message: 'Something went wrong, please try again.'
+        }
+      })
+    })
+  ),
+  {
+    dispatch: false
+  })
 
   validateJwt$ = createEffect(() =>
   this.actions$.pipe(
