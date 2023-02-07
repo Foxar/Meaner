@@ -42,7 +42,10 @@ export const signup = createAction(
     props<{credentials: SignupRequest}>()
 )
 
-export const signupSuccess = createAction('[User] Signup success')
+export const signupSuccess = createAction(
+    '[User] Signup success',
+    props<{credentials: SignupRequest}>()
+)
 
 export const signupFailed = createAction(
     '[User] Signup failed',

@@ -45,8 +45,8 @@ export class UserEffects {
       console.log(action);
       return this.meanerService.postSignup(action.credentials).pipe(
         tap(console.log),
-        map((signupResponse) => {
-          return signupSuccess()
+        map(() => {
+          return signupSuccess({credentials: action.credentials})
         }),
         catchError((error) => {
           console.error(error);
@@ -59,13 +59,15 @@ export class UserEffects {
   signupSuccess$ = createEffect(() => 
   this.actions$.pipe(
     ofType(signupSuccess),
-    tap(() => {
-      this.router.navigate(['/login']);
+    switchMap((action) => {
+      return of(login(
+        {
+          credentials: {
+            name: action.credentials.login,
+            password: action.credentials.password,
+      }}))
     })
-  ),
-  {
-    dispatch: false
-  })
+  ))
 
   signupFailed$ = createEffect(() => 
   this.actions$.pipe(
