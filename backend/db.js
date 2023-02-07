@@ -209,7 +209,12 @@ const db_insertUser = async(doc) => {
 
 const db_insertProfile = async(doc) => {
     try{
-        return await db.collection("profiles").insertOne(doc);
+        return await db.collection("profiles").insertOne({
+            _id: new ObjectId(),
+            userId: doc.userId,
+            description: "",
+            dateCreated: new Date(),
+        });
     }catch(e){
         throw e;
     }
@@ -312,5 +317,6 @@ module.exports = {
     db_changeUserPassword,
     db_insertTweetToUserLikes,
     db_removeTweetFromUserLikes,
-    db_insertUser
+    db_insertUser,
+    db_insertProfile
 }
