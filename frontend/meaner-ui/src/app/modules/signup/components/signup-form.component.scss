@@ -8,6 +8,9 @@
     max-width: 500px;
     gap: 1vh;
     justify-content: space-between;
+    .formField {
+        flex-grow: 1;
+    }
     button {
         align-self: stretch;
     }

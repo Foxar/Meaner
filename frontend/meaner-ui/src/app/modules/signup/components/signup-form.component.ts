@@ -23,6 +23,8 @@ export class SignupFormComponent {
             {
                 validators: [
                     Validators.required,
+                    Validators.minLength(8),
+                    Validators.maxLength(32),
                 ]
             }
         ],
@@ -31,6 +33,9 @@ export class SignupFormComponent {
           {
             validators: [
               Validators.required,
+              Validators.minLength(8),
+              Validators.maxLength(32),
+              Validators.pattern('(?=.*[A-Za-z])(?=.*\\d).*')
             ]
           }
         ],
@@ -48,7 +53,33 @@ export class SignupFormComponent {
 
     signup() {
         console.log(this.signupForm.value);
-        this.store.dispatch(signup({credentials: this.signupForm.value}))
+        console.log(this.signupForm.controls['password'].errors);
+        if(this.signupForm.valid)
+          this.store.dispatch(signup({credentials: this.signupForm.value}))
+        else
+          this.signupForm.markAllAsTouched();
+    }
+
+    getError(controlName: string) {
+      const errors = this.signupForm.controls[controlName].errors;
+      if(errors == null)
+        return [];
+      return Object.keys(errors).map(err => {
+        switch(err){
+          case 'pattern':
+            return 'Must have at least one letter and one number.';
+            break;
+          case 'minlength':
+          case 'maxlength':
+            return 'Must be between 8 and 32 characters long.';
+            break;
+          case 'required':
+            return 'Required.';
+            break;
+          default: 
+            return '';
+        }
+      }).shift();
     }
 
 }
