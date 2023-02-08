@@ -28,7 +28,7 @@ app.use((err,req,res,next) => {
 
     console.log("error middleware");
 
-    if(err.name == "BSONTypeError" || err.message == "400")
+    if(err.name == "BSONTypeError" || ["400", "Username taken"].includes(err.message))
     {
         err.statusCode = 400;
     }
@@ -42,7 +42,7 @@ app.use((err,req,res,next) => {
     }
 
     console.error(err);
-    res.sendStatus(err.statusCode);
+    res.status(err.statusCode).json(err.message);
 })
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

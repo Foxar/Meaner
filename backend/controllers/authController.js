@@ -3,9 +3,13 @@ const tweetService = require('../services/tweetService')
 
 
 const postSignup = async(req,res,next) => {
-    const cred = req.body;
-    const user = await authService.addUser(cred);
-    res.status(201).json(user);
+    try {
+        const cred = req.body;
+        const user = await authService.addUser(cred);
+        res.status(201).json(user);
+    }catch(e){
+        next(e);
+    }
 }
 
 const postLogin = async(req,res,next) => {

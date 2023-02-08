@@ -12,7 +12,10 @@ const addUser = async(user) => {
         })
         return dbres;
     }catch(e) {
-        return e;
+        if(e.message.includes("E11000")){
+            throw new Error("Username taken");
+        }
+        throw e;
     }
 }
 
