@@ -19,6 +19,7 @@ import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/mater
 import { BasicPopupComponent } from './components/basic-popup/basic-popup.component';
 import { tweetReactionsReducer } from 'src/app/state/tweet-reactions/tweet-reactions.reducer';
 import { TweetReactionsEffects } from 'src/app/state/tweet-reactions/tweet-reactions.effects';
+import { ErrorMessagePipe } from 'src/app/pipes/error-message.pipe';
 
 
 
@@ -43,6 +44,7 @@ const materialsModules = [
     TweetFormComponent,
     UserPinComponent,
     BasicPopupComponent,
+    ErrorMessagePipe,
   ],
   imports: [
     ...materialsModules,
@@ -60,7 +62,8 @@ const materialsModules = [
   ],
   providers: [
     ...exportComponents,
-    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 1500}}
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 1500}},
+    ErrorMessagePipe
   ]
 })
 export class SharedModule { }
