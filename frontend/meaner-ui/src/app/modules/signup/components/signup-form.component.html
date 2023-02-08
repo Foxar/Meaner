@@ -1,0 +1,33 @@
+<div class="signupForm">
+    <form [formGroup]="this.signupForm">
+        <h1>Join meaner! Get angry for free.</h1>
+        <mat-form-field class="formfield"  appearance="outline" [hideRequiredMarker]="true">
+            <mat-label>Login</mat-label>
+            <input matInput type="text" class="loginInput" formControlName="login">
+            <mat-error>
+                {{getError('login')}}
+            </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field class="formfield"  appearance="outline" [hideRequiredMarker]="true">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" class="passwordInput" formControlName="password">
+            <mat-error>
+                {{getError('password')}}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="formfield"  appearance="outline" [hideRequiredMarker]="true">
+            <mat-label>Confirm password</mat-label>
+            <input matInput type="password" class="passwordInput" formControlName="confirmPassword">
+            <mat-error>
+                {{getError('confirmPassword')}}
+            </mat-error>
+        </mat-form-field>
+        <mat-error *ngIf="this.signupForm.hasError('mismatchedPassword')" class="formError">
+            Passwords must be identical.
+        </mat-error>
+        <button mat-flat-button color="primary" (click)="signup()" type="button" [disabled]="!this.signupForm.valid">Sign up</button>
+    </form>
+
+</div>

@@ -1,6 +1,8 @@
 import { createAction, props } from "@ngrx/store";
-import { LoginRequest, LoginResponse } from "./user.model";
+import { LoginRequest, LoginResponse, SignupRequest } from "./user.model";
 
+
+//Login actions
 export const login = createAction(
     '[User] Login',
     props<{credentials: LoginRequest}>()
@@ -15,6 +17,8 @@ export const loginFailed = createAction(
     '[User] Login failed',
     props<{error: string}>()
 );
+
+//JWT Actions
 
 export const validateJwt = createAction(
     '[User] Validate JWT',
@@ -31,6 +35,22 @@ export const validateJwtFailed = createAction(
     '[User] Validate JWT failed',
     props<{error: string}>()
 );
+
+//Signup actions
+export const signup = createAction(
+    '[User] Signup',
+    props<{credentials: SignupRequest}>()
+)
+
+export const signupSuccess = createAction(
+    '[User] Signup success',
+    props<{credentials: SignupRequest}>()
+)
+
+export const signupFailed = createAction(
+    '[User] Signup failed',
+    props<{error: string}>()
+)
 
 export const resetUser = createAction('[User] Reset')
 

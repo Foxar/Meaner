@@ -194,9 +194,14 @@ const db_insertUser = async(doc) => {
     doc.password = await bcrypt.hash(doc.password, saltRounds);
     console.log("POST HASHING")
     console.log(doc);
-
+    
+    let readyDoc = {
+        name: doc.login,
+        password: doc.password,
+        likedTweets: []
+    }
     try{
-        return await db.collection("users").insertOne(doc);
+        return await db.collection("users").insertOne(readyDoc);
     }catch(e){
         throw e;
     }
@@ -204,7 +209,12 @@ const db_insertUser = async(doc) => {
 
 const db_insertProfile = async(doc) => {
     try{
-        return await db.collection("profiles").insertOne(doc);
+        return await db.collection("profiles").insertOne({
+            _id: new ObjectId(),
+            userId: doc.userId,
+            description: "",
+            dateCreated: new Date(),
+        });
     }catch(e){
         throw e;
     }
@@ -306,5 +316,7 @@ module.exports = {
     db_validatePassword,
     db_changeUserPassword,
     db_insertTweetToUserLikes,
-    db_removeTweetFromUserLikes
+    db_removeTweetFromUserLikes,
+    db_insertUser,
+    db_insertProfile
 }

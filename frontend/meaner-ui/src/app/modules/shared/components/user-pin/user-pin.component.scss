@@ -25,4 +25,9 @@
             width: min-content;
         }
     }
+
+    .signInButtons {
+        display: flex;
+        gap: 10px;
+    }
 }

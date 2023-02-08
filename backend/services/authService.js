@@ -1,7 +1,23 @@
-const { db_findUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword } = require("../db")
+const { db_insertUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword, db_insertProfile } = require("../db")
 const jwt = require('jwt-simple')
 
 const JWTSECRET = 'somesecret';
+
+
+const addUser = async(user) => {
+    try {
+        const dbres = await db_insertUser(user);
+        await db_insertProfile({
+            userId: dbres.insertedId
+        })
+        return dbres;
+    }catch(e) {
+        if(e.message.includes("E11000")){
+            throw new Error("Username taken");
+        }
+        throw e;
+    }
+}
 
 const checkCredentials = async(login,password) => {
     try{
@@ -69,5 +85,6 @@ module.exports = {
     generateToken,
     validateToken,
     changePassword,
+    addUser,
     JWTSECRET
 }

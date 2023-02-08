@@ -1,0 +1,18 @@
+.signupForm form {
+    margin: 0 auto;
+    padding: 2vw;
+    border: 1px solid black;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    gap: 1vh;
+    justify-content: space-between;
+    .formField {
+        flex-grow: 1;
+    }
+    button {
+        align-self: stretch;
+    }
+    
+}
