@@ -6,6 +6,7 @@ import { Store } from "@ngrx/store";
 import { switchMap, map, catchError, of, tap } from "rxjs";
 import { STORAGE_JWT } from "src/app/constants/constants";
 import { BasicPopupComponent, BasicPopupType } from "src/app/modules/shared/components/basic-popup/basic-popup.component";
+import { ErrorMessagePipe } from "src/app/pipes/error-message.pipe";
 import { MeanerApiService } from "src/app/services/meanerApi.service";
 import { AppState } from "../app.state";
 import { login, loginFailed, loginSuccess, resetUser, signup, signupFailed, signupSuccess, validateJwt, validateJwtFailed } from "./user.actions";
@@ -18,6 +19,7 @@ export class UserEffects {
     private meanerService: MeanerApiService,
     private router: Router,
     private snackbar: MatSnackBar,
+    private errorMsgPipe: ErrorMessagePipe,
   ) {}
   
   login$ = createEffect(() => 
@@ -50,7 +52,7 @@ export class UserEffects {
         }),
         catchError((error) => {
           console.error(error);
-          return of (signupFailed({error}))  
+          return of (signupFailed({error: error.error}))  
         })
       );
     })
@@ -72,11 +74,11 @@ export class UserEffects {
   signupFailed$ = createEffect(() => 
   this.actions$.pipe(
     ofType(signupFailed),
-    tap(() => {
+    tap((action) => {
       this.snackbar.openFromComponent(BasicPopupComponent, {
         data: {
             type: BasicPopupType.POPUP_FAILURE,
-            message: 'Something went wrong, please try again.'
+            message: this.errorMsgPipe.transform(action.error)
         }
       })
     })
