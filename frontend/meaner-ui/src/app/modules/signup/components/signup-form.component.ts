@@ -76,6 +76,9 @@ export class SignupFormComponent {
           case 'required':
             return 'Required.';
             break;
+          case 'mismatchedPassword':
+            return 'Passwords must be identical.';
+            break;
           default: 
             return '';
         }

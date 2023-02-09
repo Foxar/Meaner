@@ -7,7 +7,10 @@ export function confirmPasswordValidator(
     return (group: AbstractControl): 
     ValidationErrors | null => {
         if(group.get(field1)?.value != group.get(field2)?.value){
-            return { mismatchedPassword: true }
+            const error = { mismatchedPassword: true };
+            const prevErrors = group.get(field2)?.errors;
+            group.get(field2)?.setErrors({...error, ...prevErrors});
+            return error;
         }else {
             return null;
         }

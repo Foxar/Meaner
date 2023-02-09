@@ -24,10 +24,7 @@
                 {{getError('confirmPassword')}}
             </mat-error>
         </mat-form-field>
-        <mat-error *ngIf="this.signupForm.hasError('mismatchedPassword')" class="formError">
-            Passwords must be identical.
-        </mat-error>
-        <button mat-flat-button color="primary" (click)="signup()" type="button" [disabled]="!this.signupForm.valid">Sign up</button>
+        <button mat-flat-button color="primary" (click)="signup()" type="button" [disabled]="!this.signupForm.valid && false">Sign up</button>
     </form>
 
 </div>
