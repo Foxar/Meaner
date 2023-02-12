@@ -214,39 +214,6 @@ const switchTweetLike = async(tweetId, authToken) => {
 
 }
 
-const fetchProfileById = async(id) => {
-    if(id == null)
-        throw new Error("400")   
-        try{
-            let prof = await db_findProfile({_id: id})
-            prof['id']  = prof._id;
-            return prof;
-        }catch(e){
-            throw e;
-        }
-}
-
-const fetchProfileByUserId = async(userId) => {
-    if(userId == null)
-        throw new Error("400")   
-        try{
-            let prof = await db_findProfile({userId: userId})
-            prof['id']  = prof._id;
-            return prof;
-        }catch(e){
-            throw e;
-        }
-}
-
-const fetchUserByName = async(userName) => {
-    try{
-        return await db_findUser({name: userName})
-    }catch(e){
-        throw e;
-    }
-        
-}
-
 const mapTweetToLikedTweet  = (tweet, userLikes) => {
     return {
         ...tweet,
@@ -273,8 +240,5 @@ module.exports = {
     insertTweet,
     fetchReplies,
     // deleteTweet,
-    fetchProfileById,
-    fetchProfileByUserId,
-    fetchUserByName,
     switchTweetLike
 }

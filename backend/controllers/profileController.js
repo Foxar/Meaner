@@ -1,10 +1,11 @@
 const tweetService = require ('../services/tweetService')
+const profileService = require('../services/profileService')
 
 const getProfileById = async (req,res,next) => {
     const {id} = req.params;
 
     try{
-        const profile = await tweetService.fetchProfileById(id);
+        const profile = await profileService.fetchProfileById(id);
         if(profile == null)
             throw new Error("No profile found");
         else
@@ -19,7 +20,7 @@ const getProfileByUserId = async (req,res,next) => {
     const {id} = req.params;
 
     try{
-        const profile = await tweetService.fetchProfileByUserId(id);
+        const profile = await profileService.fetchProfileByUserId(id);
         if(profile == null)
             throw new Error("No profile found");
         else

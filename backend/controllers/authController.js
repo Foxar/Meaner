@@ -1,5 +1,6 @@
 const authService = require('../services/authService')
 const tweetService = require('../services/tweetService')
+const userService = require('../services/userService');
 
 
 const postSignup = async(req,res,next) => {
@@ -21,7 +22,7 @@ const postLogin = async(req,res,next) => {
         if(await authService.checkCredentials(login,password))
         {
             const tokenRes = await authService.generateToken(login);
-            const user = await tweetService.fetchUserByName(login);
+            const user = await userService.fetchUserByName(login);
             const userMapped = {name: user.name, id: user._id};
             res.status(200).json({...tokenRes, ...userMapped});
         }
@@ -40,7 +41,7 @@ if(token){
         const validationRes = await authService.validateToken(token);
         console.log(validationRes);
         if(validationRes){
-            const user = await tweetService.fetchUserByName(validationRes.login);
+            const user = await userService.fetchUserByName(validationRes.login);
             const userMapped = {name: user.name, id: user._id};
             res.status(200).json({token, ...validationRes, ...userMapped});
         }else {
