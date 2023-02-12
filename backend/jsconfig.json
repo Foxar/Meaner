@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es2020",
+        "module": "CommonJS",
+        "jsx": "react",
+        "checkJs": true,
+        "lib": ["esnext", "dom"],
+        "esModuleInterop": true, // force import
+        "allowSyntheticDefaultImports": true, // force import
+        "moduleResolution": "nodenext", 
+    },
+    "exclude": ["node_modules"],
+    "updateImportsOnFileMove": "prompt",
+}
