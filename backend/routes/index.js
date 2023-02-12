@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
-const tweetRoutes = require('./tweetRoutes/tweet');
-const profileRoutes = require('./tweetRoutes/profile');
-const authRoutes = require('./tweetRoutes/auth');
+const tweetRoutes = require('./tweet');
+const profileRoutes = require('./profile');
+const authRoutes = require('./auth');
 
 router
     .use('/tweets', tweetRoutes)

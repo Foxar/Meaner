@@ -34,7 +34,7 @@ const postLogin = async(req,res,next) => {
     }
 }
 
-const validateToken = async(req,res,next) => {
+const postValidateToken = async(req,res,next) => {
     const token = req.headers['authorization'];
 if(token){
         const validationRes = await authService.validateToken(token);
@@ -64,7 +64,7 @@ const authMiddleware = async(req,res,next) => {
     }
 }
 
-const changePassword = async(req,res,next) => {
+const postChangePassword = async(req,res,next) => {
     try{
         const creds = req.body;
         console.log(creds);
@@ -83,7 +83,7 @@ const changePassword = async(req,res,next) => {
 module.exports = {
     postSignup,
     postLogin,
-    validateToken,
+    postValidateToken,
     authMiddleware,
-    changePassword,
+    postChangePassword,
 }

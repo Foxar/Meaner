@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const tweetController = require('../../controllers/tweetController');
-const authController = require('../../controllers/authController');
+const tweetController = require('../controllers/tweetController');
+const authController = require('../controllers/authController');
 
 router
     .get('/home/:offset', tweetController.getHomeTweets)
