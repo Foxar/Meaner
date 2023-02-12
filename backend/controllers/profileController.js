@@ -1,3 +1,5 @@
+const tweetService = require ('../services/tweetService')
+
 const getProfileById = async (req,res,next) => {
     const {id} = req.params;
 

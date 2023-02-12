@@ -11,9 +11,9 @@ const saltRounds = 10;
 
 
 const db_generateMock = async (mockDb) => {
-    await db.collection("users").remove({});
-    await db.collection("tweets").remove({});
-    await db.collection("profiles").remove({});
+    await db.collection("users").deleteMany({});
+    await db.collection("tweets").deleteMany({});
+    await db.collection("profiles").deleteMany({});
 
     await Promise.all(mockDb.users.map(async u => {
         // console.log("Inserting user:");
@@ -83,7 +83,7 @@ const db_findTweets = async (query, options) => {
 const db_findTweet = async(query,options) => {
     
     return (await (db.collection("tweets").aggregate([
-        { $match : {_id: {$eq: ObjectId(query._id) }}},
+        { $match : {_id: {$eq: new ObjectId(query._id) }}},
         { $lookup: {from: "users", localField: "authorId", foreignField:"_id", as: "author",},},
         { $unwind: "$author" },
         { $addFields: {authorName: '$author.name'}},
@@ -96,7 +96,7 @@ const db_findTweet = async(query,options) => {
 
 const db_findUserTweets = async(query,options) => {
     return await (db.collection("tweets").aggregate([
-        { $match : {authorId: {$eq: ObjectId(query.id) }}},
+        { $match : {authorId: {$eq: new ObjectId(query.id) }}},
         { $lookup: {from: "users", localField: "authorId", foreignField:"_id", as: "author",},},
         { $unwind: "$author" },
         { $addFields: {authorName: '$author.name'}},
@@ -106,10 +106,10 @@ const db_findUserTweets = async(query,options) => {
 
 const db_findProfile = async(query,options) => {
     if(query._id){
-        query._id = ObjectId(query._id);
+        query._id = new ObjectId(query._id);
     }
     if(query.userId){
-        query.userId = ObjectId(query.userId); 
+        query.userId = new ObjectId(query.userId); 
     }
 
     const prof = await db.collection("profiles").findOne({...query});
@@ -126,7 +126,7 @@ const db_findReplies = async(query,options) => {
     console.log(query);
 
     return await (db.collection("tweets").aggregate([
-        { $match : {replyToId: {$eq: ObjectId(query.id) }}},
+        { $match : {replyToId: {$eq: new ObjectId(query.id) }}},
         { $lookup: {from: "users", localField: "authorId", foreignField:"_id", as: "author",},},
         { $unwind: "$author" },
         { $addFields: {authorName: '$author.name'}},
@@ -138,14 +138,14 @@ const db_findReplies = async(query,options) => {
 const db_insertTweet = async(doc) => {
     try{
         // console.log(doc);
-        const author = await db.collection("users").findOne({_id: ObjectId(doc.authorId)});
+        const author = await db.collection("users").findOne({_id: new ObjectId(doc.authorId)});
         if(!author){
             // console.log(doc.authorId);
             throw new Error("400");
         }
         if(doc.replyToId){
             // console.log(doc.replyToId);
-            const parentTweet = await db.collection("tweets").findOne({_id: ObjectId(doc.replyToId)});
+            const parentTweet = await db.collection("tweets").findOne({_id: new ObjectId(doc.replyToId)});
             if(!parentTweet)
             {
                 // console.log(doc);
@@ -155,16 +155,16 @@ const db_insertTweet = async(doc) => {
         }
         doc = {
             ...doc,
-            authorId: ObjectId(doc.authorId),
+            authorId: new ObjectId(doc.authorId),
             likes: 0,
             retweets: 0,
             replies: 0,
-            replyToId: doc.replyToId?ObjectId(doc.replyToId):null,
+            replyToId: doc.replyToId?new ObjectId(doc.replyToId):null,
             date: new Date(),
         }
         await db.collection("tweets").insertOne(doc);
         if(doc.replyToId){
-            await db.collection("tweets").updateOne({_id: ObjectId(doc.replyToId)},{$inc: {replies:1}})
+            await db.collection("tweets").updateOne({_id: new ObjectId(doc.replyToId)},{$inc: {replies:1}})
         }
         return doc;
     }catch(e){
@@ -223,7 +223,7 @@ const db_insertProfile = async(doc) => {
 const db_findUser = async(query) => {
     for(const [key,value] of Object.entries(query)){
         if(['_id','userId'].includes(key))
-            query[key] = ObjectId(value);
+            query[key] = new ObjectId(value);
     }
     
     try {
@@ -236,8 +236,8 @@ const db_findUser = async(query) => {
 
 
 const db_insertTweetToUserLikes = async(userId, tweetId) => {
-    userId = ObjectId(userId);
-    tweetId = ObjectId(tweetId);
+    userId = new ObjectId(userId);
+    tweetId = new ObjectId(tweetId);
 
     try {
         await db.collection("users").updateOne({_id: userId}, {$addToSet: { likedTweets: tweetId}});
@@ -248,8 +248,8 @@ const db_insertTweetToUserLikes = async(userId, tweetId) => {
 }
 
 const db_removeTweetFromUserLikes = async(userId, tweetId) => {
-    userId = ObjectId(userId);
-    tweetId = ObjectId(tweetId);
+    userId = new ObjectId(userId);
+    tweetId = new ObjectId(tweetId);
 
     try {
         await db.collection("users").updateOne({_id: userId}, {$pull: { likedTweets: tweetId}});
@@ -287,7 +287,7 @@ const db_validatePassword = async(userId, password) => {
 
 const db_changeUserPassword = async(userId, newPassword) => {
     try{
-        hash = await bcrypt.hash(newPassword, saltRounds);
+        const hash = await bcrypt.hash(newPassword, saltRounds);
         return await db.collection("users").updateOne(
         {
             _id: new ObjectId(userId)

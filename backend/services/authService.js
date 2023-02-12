@@ -1,4 +1,5 @@
 const { db_insertUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword, db_insertProfile } = require("../db")
+const { InvalidSignupError } = require("../middleware/errors");
 const jwt = require('jwt-simple')
 
 const JWTSECRET = 'somesecret';
@@ -13,9 +14,10 @@ const addUser = async(user) => {
         return dbres;
     }catch(e) {
         if(e.message.includes("E11000")){
-            throw new Error("Username taken");
+            throw new InvalidSignupError("Username taken");
+        }else {
+            throw e;
         }
-        throw e;
     }
 }
 
