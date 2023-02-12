@@ -8,9 +8,9 @@ const {db_generateMock} = require('./db')
 const { errorResponder } = require('./middleware/errorResponder')
 const { errorLogger } = require('./middleware/errorLogger')
 
-const mockDb = generateDatabase();
+// const mockDb = generateDatabase();
 
-console.log(mockDb);
+// console.log(mockDb);
 //db_generateMock(mockDb);
 
 
