@@ -1,4 +1,4 @@
-const { db_insertUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword, db_insertProfile } = require("../db")
+const { db_insertUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword, db_insertProfile } = require("../db/index")
 const { InvalidSignupError } = require("../middleware/errors");
 const jwt = require('jwt-simple')
 

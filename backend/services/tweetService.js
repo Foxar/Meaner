@@ -1,4 +1,4 @@
-const {db_insertTweetToUserLikes, db_findTweet, db_findTweets, db_insertTweet, db_findReplies, db_findUserTweets, db_findProfile, db_findUser, db_removeTweetFromUserLikes} = require('../db')
+const {db_insertTweetToUserLikes, db_findTweet, db_findTweets, db_insertTweet, db_findReplies, db_findUserTweets, db_findProfile, db_findUser, db_removeTweetFromUserLikes} = require('../db/index')
 const {JWTSECRET} = require('./authService');
 const jwt = require('jwt-simple')
 
@@ -51,9 +51,9 @@ const fetchTweets = async(offset, authToken) => {
         {
             const decodedJwt = jwt.decode(authToken,JWTSECRET)
             console.log(decodedJwt);
-            let currentUser = await db_findUser({name: decodedJwt.login});
+            const currentUser = await db_findUser({name: decodedJwt.login});
             console.log(currentUser);
-            currentUserId = currentUser._id;
+            const currentUserId = currentUser._id;
             userLikes = currentUser.likedTweets;
         }
         
@@ -61,7 +61,7 @@ const fetchTweets = async(offset, authToken) => {
         offset = parseInt(offset);
         console.log("ASDF");
         console.log(offset);
-        const tweets =  await db_findTweets({}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
+        let tweets =  await db_findTweets({}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
         tweets = tweets.map(t => mapTweetToLikedTweet(t,userLikes));
         console.log(tweets);
         return tweets;
@@ -80,7 +80,7 @@ const fetchTweet = async(id, authToken) => {
             console.log(decodedJwt);
             let currentUser = await db_findUser({name: decodedJwt.login});
             console.log(currentUser);
-            currentUserId = currentUser._id;
+            const currentUserId = currentUser._id;
             userLikes = currentUser.likedTweets;
         }
 
@@ -107,7 +107,7 @@ const fetchUserTweets = async(id, authToken) => {
             console.log(decodedJwt);
             let currentUser = await db_findUser({name: decodedJwt.login});
             console.log(currentUser);
-            currentUserId = currentUser._id;
+            const currentUserId = currentUser._id;
             userLikes = currentUser.likedTweets;
         }
 
@@ -138,7 +138,7 @@ const fetchReplies = async(id, authToken) => {
             console.log(decodedJwt);
             let currentUser = await db_findUser({name: decodedJwt.login});
             console.log(currentUser);
-            currentUserId = currentUser._id;
+            const currentUserId = currentUser._id;
             userLikes = currentUser.likedTweets;
         }
 
@@ -219,7 +219,7 @@ const fetchProfileById = async(id) => {
         throw new Error("400")   
         try{
             let prof = await db_findProfile({_id: id})
-            prof.id  = prof._id;
+            prof['id']  = prof._id;
             return prof;
         }catch(e){
             throw e;
@@ -231,7 +231,7 @@ const fetchProfileByUserId = async(userId) => {
         throw new Error("400")   
         try{
             let prof = await db_findProfile({userId: userId})
-            prof.id  = prof._id;
+            prof['id']  = prof._id;
             return prof;
         }catch(e){
             throw e;
