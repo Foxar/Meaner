@@ -25,7 +25,7 @@ const fetchHomeTweets = async(offset, authToken) => {
         console.log("ASDF");
         console.log(offset);
         let tweets =  await db_findTweets({replyToId: null}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
-        console.log(tweets);
+        // console.log(tweets);
         tweets = tweets.map(t=>{
             let {_id, ...mappedTweet} = t
             return {
@@ -36,7 +36,7 @@ const fetchHomeTweets = async(offset, authToken) => {
 
         tweets = tweets.map(t => mapTweetToLikedTweet(t,userLikes));
 
-        console.log(tweets);
+        // console.log(tweets);
         return tweets;
     }catch(e) {
         throw new Error(e.message);
