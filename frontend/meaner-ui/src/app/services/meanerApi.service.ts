@@ -72,7 +72,7 @@ export class MeanerApiService {
 
     validateJwt(jwtToCheck: string): Observable<LoginResponse> {
         console.log("Meaner api - validate jwt");
-        return this.http.get<LoginResponse>(`${this.apiUrl}/auth/validateToken`,{headers: new HttpHeaders({Authorization: jwtToCheck})}).pipe(
+        return this.http.post<LoginResponse>(`${this.apiUrl}/auth/validateToken`,{headers: new HttpHeaders({Authorization: jwtToCheck})}).pipe(
             tap((a)=>{console.log("validateJwt()");console.log(a);})
         );
     }
