@@ -8,8 +8,6 @@ class InvalidSignupError extends OperationalError {
     constructor(message) {
         super();
         this.name = this.constructor.name;
-        console.log("constructor name");
-        console.log(this.constructor.name);
 
         this.message = message;
         this.statusCode = 400;
