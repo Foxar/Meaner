@@ -1,13 +1,23 @@
-const { db_insertUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword, db_insertProfile } = require("../db/index")
+const { db_insertUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword, db_insertProfile, db_findUser } = require("../db/index")
+const userService = require('./userService');
+const { bcrypt, saltRounds } = require('../db/dbConfig');
 const { InvalidSignupError } = require("../middleware/errors");
 const jwt = require('jwt-simple')
 
 const JWTSECRET = 'somesecret';
 
 
-const addUser = async(user) => {
+const addUser = async(login, password, confirmPassword) => {
     try {
-        const dbres = await db_insertUser(user);
+        if(password != confirmPassword) {
+            throw new InvalidSignupError("Passwords aren't matching.");
+        }
+        const hash = await bcrypt.hash(password, saltRounds);
+        const dbres = await db_insertUser({
+            name: login,
+            password: hash
+        });
+
         await db_insertProfile({
             userId: dbres.insertedId
         })
@@ -21,14 +31,20 @@ const addUser = async(user) => {
     }
 }
 
+const login = async(login,password) => {
+    if(await checkCredentials(login,password)){
+        const token = await generateToken(login);
+        const user = await userService.fetchUserByName(login);
+        const userMapped = {name: user.name, id: user._id};
+        return {...token, ...userMapped};
+    }
+    return null;
+}
+
 const checkCredentials = async(login,password) => {
     try{
-        console.log("Check credentials");
-        const dbres = await db_verifyCredentials(login,password);
-        console.log("dbres");
-        console.log(dbres);
-        return dbres;
-
+        const user = await db_findUser({"name": login});
+        return await bcrypt.compare(password, user.password);
     }catch(e) {
         throw e;
     }
@@ -39,7 +55,8 @@ const generateToken = async (login) => {
         let now = new Date();
         let expiration = new Date();
         expiration.setDate(now.getDate()+7);
-        return {token: jwt.encode({login: login, expire: expiration}, JWTSECRET), expires: expiration}
+        return {
+            token: jwt.encode({login: login, expire: expiration}, JWTSECRET), expires: expiration}
     }catch(e){
         throw e;
     }
@@ -83,10 +100,9 @@ const changePassword = async(userId, password, newPassword) => {
 
 
 module.exports = {
-    checkCredentials,
-    generateToken,
     validateToken,
     changePassword,
     addUser,
+    login,
     JWTSECRET
 }

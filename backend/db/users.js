@@ -1,23 +1,13 @@
 const { bcrypt, saltRounds, db, ObjectId } = require("./dbConfig");
 
 const db_insertUser = async(doc) => {
-    console.log("USER");
-    console.log(doc);
-
-    doc.password = await bcrypt.hash(doc.password, saltRounds);
-    console.log("POST HASHING")
-    console.log(doc);
-    
     let readyDoc = {
-        name: doc.login,
+        name: doc.name,
         password: doc.password,
         likedTweets: []
     }
-    try{
-        return await db.collection("users").insertOne(readyDoc);
-    }catch(e){
-        throw e;
-    }
+    console.log("Inserting user:", readyDoc);
+    return await db.collection("users").insertOne(readyDoc);
 }
 
 const db_findUser = async(query) => {

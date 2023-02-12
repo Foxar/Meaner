@@ -5,8 +5,8 @@ const userService = require('../services/userService');
 
 const postSignup = async(req,res,next) => {
     try {
-        const cred = req.body;
-        const user = await authService.addUser(cred);
+        const { login, password, confirmPassword } = req.body;
+        const user = await authService.addUser(login, password, confirmPassword);
         res.status(201).json(user);
     }catch(e){
         next(e);
@@ -14,22 +14,16 @@ const postSignup = async(req,res,next) => {
 }
 
 const postLogin = async(req,res,next) => {
-    const creds = req.body;
-    console.log(creds);
-    const {login, password}= creds;
+    const {login, password} = req.body;
+    console.log(login);
+    console.log(password);
 
     try {
-        if(await authService.checkCredentials(login,password))
-        {
-            const tokenRes = await authService.generateToken(login);
-            const user = await userService.fetchUserByName(login);
-            const userMapped = {name: user.name, id: user._id};
-            res.status(200).json({...tokenRes, ...userMapped});
+        const loginRes = await authService.login(login,password);
+        if(loginRes){
+            res.status(200).json(loginRes);
         }
-        else
-        {
-            res.sendStatus(401);
-        }
+        res.sendStatus(401);
     }catch(e){
         next(e);
     }
@@ -37,7 +31,7 @@ const postLogin = async(req,res,next) => {
 
 const postValidateToken = async(req,res,next) => {
     const token = req.headers['authorization'];
-if(token){
+    if(token){
         const validationRes = await authService.validateToken(token);
         console.log(validationRes);
         if(validationRes){
