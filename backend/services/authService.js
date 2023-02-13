@@ -69,7 +69,13 @@ const validateToken = async(token) => {
         if(new Date(decoded.expire) < new Date()){
             return false;
         }
-        return decoded;
+        if(decoded){
+            const user = await userService.fetchUserByName(decoded.login);
+            const userMapped = {name: user.name, id: user._id};
+            return {token, ...decoded, ...userMapped};
+        }else{
+            return null
+        }
     }catch(e){
         throw e;
     }

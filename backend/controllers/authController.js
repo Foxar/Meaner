@@ -35,29 +35,15 @@ const postValidateToken = async(req,res,next) => {
         const validationRes = await authService.validateToken(token);
         console.log(validationRes);
         if(validationRes){
-            const user = await userService.fetchUserByName(validationRes.login);
-            const userMapped = {name: user.name, id: user._id};
-            res.status(200).json({token, ...validationRes, ...userMapped});
+            res.status(200).json(validationRes);
         }else {
-            res.status(401).send({error: "Invalid or missing token."})
+            res.status(401).send({error: "Invalid token."})
         }
     }else {
-        res.status(401).send({error: "Invalid or missing token."})
+        res.status(401).send({error: "Missing token."})
     }
 }
 
-const authMiddleware = async(req,res,next) => {
-    const token = req.headers['authorization'];
-    if(token){
-        const validationRes = await authService.validateToken(token);
-        console.log(validationRes);
-        if(validationRes){
-            next()
-        }
-    }else {
-        res.status(401).send({error: "Invalid or missing token."})
-    }
-}
 
 const postChangePassword = async(req,res,next) => {
     try{
@@ -79,6 +65,5 @@ module.exports = {
     postSignup,
     postLogin,
     postValidateToken,
-    authMiddleware,
     postChangePassword,
 }
