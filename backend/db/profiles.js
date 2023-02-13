@@ -1,3 +1,4 @@
+const { ProfileNotFoundError } = require("../middleware/errors");
 const { ObjectId, db } = require("./dbConfig");
 
 const db_insertProfile = async(doc) => {
@@ -22,6 +23,9 @@ const db_findProfile = async(query,options) => {
     }
 
     const prof = await db.collection("profiles").findOne({...query});
+    if(!prof){
+        throw new ProfileNotFoundError("Profile not found.");
+    }
     console.log(query);
     const user = await db.collection("users").findOne({_id: prof.userId});
     const tweetCount  = await db.collection("tweets").countDocuments({authorId: {$eq: prof.userId}});

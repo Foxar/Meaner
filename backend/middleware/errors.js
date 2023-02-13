@@ -41,10 +41,21 @@ class InvalidRequestError extends OperationalError {
     }
 }
 
+class ProfileNotFoundError extends OperationalError {
+    constructor(message) {
+        super();
+        this.name = this.constructor.name;
+        this.message = message;
+        this.statusCode = 400;
+    }
+}
+
+
 module.exports = {
     OperationalError,
     InvalidSignupError,
     InvalidLoginError,
     InvalidAuthTokenError,
     InvalidRequestError,
+    ProfileNotFoundError
 }
