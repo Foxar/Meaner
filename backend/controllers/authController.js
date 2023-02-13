@@ -15,15 +15,10 @@ const postSignup = async(req,res,next) => {
 
 const postLogin = async(req,res,next) => {
     const {login, password} = req.body;
-    console.log(login);
-    console.log(password);
-
+    console.log(req.body);
     try {
         const loginRes = await authService.login(login,password);
-        if(loginRes){
-            res.status(200).json(loginRes);
-        }
-        res.sendStatus(401);
+        res.status(200).json(loginRes);
     }catch(e){
         next(e);
     }
@@ -34,11 +29,7 @@ const postValidateToken = async(req,res,next) => {
     if(token){
         const validationRes = await authService.validateToken(token);
         console.log(validationRes);
-        if(validationRes){
-            res.status(200).json(validationRes);
-        }else {
-            res.status(401).send({error: "Invalid token."})
-        }
+        res.status(200).json(validationRes);
     }else {
         res.status(401).send({error: "Missing token."})
     }
@@ -47,9 +38,7 @@ const postValidateToken = async(req,res,next) => {
 
 const postChangePassword = async(req,res,next) => {
     try{
-        const creds = req.body;
-        console.log(creds);
-        const {userId, password, newPassword}= creds;
+        const { userId, password, newPassword }= req.body;
         const changePassRes = await authService.changePassword(userId, password, newPassword);
         if(changePassRes.result){
             res.status(200).json()

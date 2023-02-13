@@ -1,7 +1,7 @@
 const { db_insertUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword, db_insertProfile, db_findUser } = require("../db/index")
 const userService = require('./userService');
 const { bcrypt, saltRounds } = require('../db/dbConfig');
-const { InvalidSignupError } = require("../middleware/errors");
+const { InvalidSignupError, InvalidLoginError, InvalidAuthTokenError } = require("../middleware/errors");
 const jwt = require('jwt-simple')
 
 const JWTSECRET = 'somesecret';
@@ -37,8 +37,9 @@ const login = async(login,password) => {
         const user = await userService.fetchUserByName(login);
         const userMapped = {name: user.name, id: user._id};
         return {...token, ...userMapped};
+    }else {
+        throw new InvalidLoginError("Invalid username or password.")
     }
-    return null;
 }
 
 const checkCredentials = async(login,password) => {
@@ -67,14 +68,14 @@ const validateToken = async(token) => {
         const decoded = jwt.decode(token,JWTSECRET);
         console.log(decoded);
         if(new Date(decoded.expire) < new Date()){
-            return false;
+            throw new InvalidAuthTokenError("Token is expired.")
         }
         if(decoded){
             const user = await userService.fetchUserByName(decoded.login);
             const userMapped = {name: user.name, id: user._id};
             return {token, ...decoded, ...userMapped};
         }else{
-            return null
+            throw new InvalidAuthTokenError("Invalid token.")
         }
     }catch(e){
         throw e;

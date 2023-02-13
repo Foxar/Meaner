@@ -14,7 +14,27 @@ class InvalidSignupError extends OperationalError {
     }
 }
 
+class InvalidLoginError extends OperationalError {
+    constructor(message) {
+        super();
+        this.name = this.constructor.name;
+        this.message = message;
+        this.statusCode = 401;
+    }
+}
+
+class InvalidAuthTokenError extends OperationalError {
+    constructor(message) {
+        super();
+        this.name = this.constructor.name;
+        this.message = message;
+        this.statusCode = 401;
+    }
+}
+
 module.exports = {
     OperationalError,
-    InvalidSignupError
+    InvalidSignupError,
+    InvalidLoginError,
+    InvalidAuthTokenError
 }
