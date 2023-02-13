@@ -49,12 +49,12 @@ const db_validatePassword = async(userId, password) => {
     }
 }
 
-const db_changeUserPassword = async(userId, newPassword) => {
+const db_changeUserPassword = async(login, newPassword) => {
     try{
         const hash = await bcrypt.hash(newPassword, saltRounds);
         return await db.collection("users").updateOne(
         {
-            _id: new ObjectId(userId)
+            name: login
         },
         {
             $set: { "password": hash }

@@ -1,7 +1,7 @@
 const { db_insertUser, db_verifyCredentials, db_validatePassword, db_changeUserPassword, db_insertProfile, db_findUser } = require("../db/index")
 const userService = require('./userService');
 const { bcrypt, saltRounds } = require('../db/dbConfig');
-const { InvalidSignupError, InvalidLoginError, InvalidAuthTokenError } = require("../middleware/errors");
+const { InvalidSignupError, InvalidLoginError, InvalidAuthTokenError, InvalidRequestError } = require("../middleware/errors");
 const jwt = require('jwt-simple')
 
 const JWTSECRET = 'somesecret';
@@ -82,20 +82,21 @@ const validateToken = async(token) => {
     }
 }
 
-const changePassword = async(userId, password, newPassword) => {
+const changePassword = async(login, password, newPassword) => {
     try {
-        const validateRes = await db_validatePassword(userId,password);
+        // const validateRes = await db_validatePassword(userId,password);
+        const validateRes = await checkCredentials(login,password);
         console.log(validateRes);
         if(validateRes){
-            const changePassRes = await db_changeUserPassword(userId, newPassword)
+            const changePassRes = await db_changeUserPassword(login, newPassword)
             console.log(changePassRes);
             if(changePassRes.acknowledged && changePassRes.modifiedCount > 0){
-                return {result: true, status: 200};
+                return true;
             }else{
-                return {result: false, status: 400};
+                throw new InvalidRequestError("Unknown user for password change.")
             }
         }else{
-            return {result: false, status: 401}
+            throw new InvalidLoginError("Invalid username or password.");
         }
         
     }catch(e){

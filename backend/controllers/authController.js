@@ -38,13 +38,10 @@ const postValidateToken = async(req,res,next) => {
 
 const postChangePassword = async(req,res,next) => {
     try{
-        const { userId, password, newPassword }= req.body;
-        const changePassRes = await authService.changePassword(userId, password, newPassword);
-        if(changePassRes.result){
-            res.status(200).json()
-        }else {
-            res.sendStatus(changePassRes.status);
-        }
+        const { login, password, newPassword }= req.body;
+        console.log(req.body);
+        const changePassRes = await authService.changePassword(login, password, newPassword);
+        res.sendStatus(200);
     }catch(e){
         next(e);
     }
