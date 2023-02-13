@@ -1,9 +1,6 @@
 const { ObjectId, db } = require("./dbConfig");
 
 const db_findTweets = async (query, options) => {
-    console.log(options);
-    console.log(query);
-    
     
     return await (db.collection("tweets").aggregate([
         { $match: {...query}},

@@ -1,51 +1,40 @@
 const {db_insertTweetToUserLikes, db_findTweet, db_findTweets, db_insertTweet, db_findReplies, db_findUserTweets, db_findProfile, db_findUser, db_removeTweetFromUserLikes} = require('../db/index')
 const {JWTSECRET} = require('./authService');
-const jwt = require('jwt-simple')
+const jwt = require('jwt-simple');
+const { InvalidRequestError } = require('../middleware/errors');
 
 const TWEET_REQUEST_LIMIT = 10;
 
 const fetchHomeTweets = async(offset, authToken) => {
     try {
-        console.log("FETCH");
-        console.log(authToken);
-        let currentUserId;
-        let userLikes;
-        if(authToken) //This block should be moved to some kind of middleware. Since this project is frontend-focused, this is optional.
+        offset = parseInt(offset);
+        if(isNaN(offset)){
+            throw new InvalidRequestError("Param offset must be an integer.")
+        }
+        let tweets =  await db_findTweets({replyToId: null}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
+        if(authToken)
         {
             const decodedJwt = jwt.decode(authToken,JWTSECRET)
-            console.log(decodedJwt);
             let currentUser = await db_findUser({name: decodedJwt.login});
-            console.log(currentUser);
-            currentUserId = currentUser._id;
-            userLikes = currentUser.likedTweets;
+            let userLikes = currentUser.likedTweets;
+            tweets = tweets.map(t=>{
+                let {_id, ...mappedTweet} = t
+                return mapTweetToLikedTweet({
+                        ...mappedTweet,
+                        id: t._id,
+                    },
+                    userLikes)
+                
+            });
         }
-
-        offset = parseInt(offset);
-        console.log(currentUserId);
-        console.log("ASDF");
-        console.log(offset);
-        let tweets =  await db_findTweets({replyToId: null}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
-        // console.log(tweets);
-        tweets = tweets.map(t=>{
-            let {_id, ...mappedTweet} = t
-            return {
-                ...mappedTweet,
-                id: t._id,
-            }
-        });
-
-        tweets = tweets.map(t => mapTweetToLikedTweet(t,userLikes));
-
-        // console.log(tweets);
         return tweets;
     }catch(e) {
-        throw new Error(e.message);
+        throw e;
     }
 }
 
 const fetchTweets = async(offset, authToken) => {
     try {
-
         let userLikes;
         if(authToken)
         {

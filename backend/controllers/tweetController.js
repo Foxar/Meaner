@@ -1,16 +1,14 @@
+const { InvalidAuthTokenError } = require('../middleware/errors');
 const tweetService = require('../services/tweetService');
 
 const getHomeTweets = async (req,res,next) => {
     const {offset} = req.params;
     const token = req.headers['authorization'];
 
-    console.log("Get all tweets");
-
     try {
         const tweets = await tweetService.fetchHomeTweets(offset,token);
         res.status(200).json(tweets);
     }catch(e){
-        res.sendStatus(500);
         next(e);
     }
 }
