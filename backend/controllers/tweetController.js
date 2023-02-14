@@ -13,21 +13,6 @@ const getHomeTweets = async (req,res,next) => {
     }
 }
 
-const getAllTweets = async (req,res,next) => {
-    const {offset} = req.params;
-    const token = req.headers['authorization'];
-
-    console.log("Get all tweets");
-
-    try {
-        const tweets = await tweetService.fetchTweets(offset,token);
-        res.status(200).json(tweets);
-    }catch(e){
-        res.sendStatus(500);
-        next(e);
-    }
-}
-
 const getTweet = async (req,res,next) => {
     const {id} = req.params;
     const token = req.headers['authorization'];
@@ -105,7 +90,6 @@ const likeTweet = async(req,res,next) => {
 
 
 module.exports = {
-    getAllTweets,
     getHomeTweets,
     getTweet,
     getUserTweets,

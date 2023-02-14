@@ -33,32 +33,6 @@ const fetchHomeTweets = async(offset, authToken) => {
     }
 }
 
-const fetchTweets = async(offset, authToken) => {
-    try {
-        let userLikes;
-        if(authToken)
-        {
-            const decodedJwt = jwt.decode(authToken,JWTSECRET)
-            console.log(decodedJwt);
-            const currentUser = await db_findUser({name: decodedJwt.login});
-            console.log(currentUser);
-            const currentUserId = currentUser._id;
-            userLikes = currentUser.likedTweets;
-        }
-        
-
-        offset = parseInt(offset);
-        console.log("ASDF");
-        console.log(offset);
-        let tweets =  await db_findTweets({}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
-        tweets = tweets.map(t => mapTweetToLikedTweet(t,userLikes));
-        console.log(tweets);
-        return tweets;
-    }catch(e) {
-        throw new Error(e.message);
-    }
-}
-
 const fetchTweet = async(id, authToken) => {
     try {
 
@@ -222,7 +196,6 @@ const deleteTweet = async(id) => {
 }
  */
 module.exports = {
-    fetchTweets,
     fetchHomeTweets,
     fetchTweet,
     fetchUserTweets,
