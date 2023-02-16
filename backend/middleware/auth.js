@@ -16,14 +16,12 @@ const authMiddleware = async(req,res,next) => {
 }
 
 const tokenDecodeMiddleware = async(req,res,next) => {
-    console.log("tokenDecodeMiddleware");
     const token = req.headers['authorization'];
     if(token){
         const validationRes = await authService.validateToken(token);
         if(validationRes){
             const decoded = jwt.decode(token,authService.JWTSECRET);
             req.userLogin=decoded.login;
-            console.log(decoded);
         }
     }
     next();
