@@ -41,12 +41,12 @@ class InvalidRequestError extends OperationalError {
     }
 }
 
-class ProfileNotFoundError extends OperationalError {
+class ResourceNotFoundError extends OperationalError {
     constructor(message) {
         super();
         this.name = this.constructor.name;
         this.message = message;
-        this.statusCode = 400;
+        this.statusCode = 404;
     }
 }
 
@@ -57,5 +57,5 @@ module.exports = {
     InvalidLoginError,
     InvalidAuthTokenError,
     InvalidRequestError,
-    ProfileNotFoundError
+    ResourceNotFoundError
 }
