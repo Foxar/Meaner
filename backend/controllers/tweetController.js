@@ -1,4 +1,4 @@
-const { InvalidAuthTokenError } = require('../middleware/errors');
+const { InvalidAuthTokenError, InvalidRequestError } = require('../middleware/errors');
 const tweetService = require('../services/tweetService');
 
 const getHomeTweets = async (req,res,next) => {
@@ -18,13 +18,12 @@ const getTweet = async (req,res,next) => {
     const token = req.headers['authorization'];
 
     try{
+        if(!id){
+            throw new InvalidRequestError("Missing ID parameter.");
+        }
         const tweet = await tweetService.fetchTweet(id,token);
-        if(tweet == null)
-            throw new Error("No tweet found");
-        else
-            res.status(200).json(tweet);
+        res.status(200).json(tweet);
     }catch(e){
-        //res.status(e.statusCode).json({error: e.message});
         next(e);
     }
 }
@@ -34,11 +33,11 @@ const getUserTweets = async(req,res,next) => {
     const token = req.headers['authorization'];
 
     try {
+        if(!id){
+            throw new InvalidRequestError("Missing userId parameter.");
+        }
         const tweets = await tweetService.fetchUserTweets(id,token);
-        if(tweets == null || tweets.length == 0)
-            res.sendStatus(404);
-        else
-            res.status(200).json(tweets);
+        res.status(200).json(tweets);
     }catch(e){
         next(e);
     }
@@ -49,6 +48,9 @@ const getReplies = async(req,res,next) => {
     const token = req.headers['authorization'];
 
     try {
+        if(!id){
+            throw new InvalidRequestError("Missing tweetId parameter.");
+        }
         const replies = await tweetService.fetchReplies(id,token);
         res.status(200).json(replies);
     }catch(e){
