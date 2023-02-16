@@ -5,121 +5,59 @@ const { InvalidRequestError, ResourceNotFoundError } = require('../middleware/er
 
 const TWEET_REQUEST_LIMIT = 10;
 
-const fetchHomeTweets = async(offset, authToken) => {
+const fetchHomeTweets = async(offset, userLogin) => {
     try {
         offset = parseInt(offset);
         if(isNaN(offset)){
             throw new InvalidRequestError("Param offset must be an integer.")
         }
         let tweets =  await db_findTweets({replyToId: null}, {limit: TWEET_REQUEST_LIMIT, sort: {"date": -1}, skip: offset});
-        let userLikes;
-        if(authToken)
-        {
-            const decodedJwt = jwt.decode(authToken,JWTSECRET)
-            let currentUser = await db_findUser({name: decodedJwt.login});
-            userLikes = currentUser.likedTweets;
-        }
-        return tweets = tweets.map(t=>{
-            let {_id, ...mappedTweet} = t
-            return mapTweetToLikedTweet({
-                    ...mappedTweet,
-                    id: t._id,
-                },
-                userLikes)
-            
-        });
+        return tweetArrayMarkLiked(tweets,userLogin);
     }catch(e) {
         throw e;
     }
 }
 
-const fetchTweet = async(id, authToken) => {
+const fetchTweet = async(id, userLogin) => {
     try {
 
         let tweetFound = await db_findTweet({_id: id});
         if(!tweetFound){
             throw new ResourceNotFoundError("Tweet not found.");
         }
-        let {_id, ...mappedTweet} = tweetFound;
-        let userLikes;
-        if(authToken)
-        {
-            const decodedJwt = jwt.decode(authToken,JWTSECRET)
-            let currentUser = await db_findUser({name: decodedJwt.login});
-            userLikes = currentUser.likedTweets;
-        }
-        let tweet = {
-            ...mappedTweet,
-            id: _id
-        }
-        return mapTweetToLikedTweet(tweet,userLikes)
+        
+        const finalTweet = await tweetArrayMarkLiked([tweetFound],userLogin);
+        return finalTweet.at(0);
     }catch(e) {
        throw e;
     }
 }
 
-const fetchUserTweets = async(id, authToken) => {
+const fetchUserTweets = async(id, userLogin) => {
     try{
 
         let tweets = await db_findUserTweets({id: id});
-        let userLikes;
-        if(authToken)
-        {
-            const decodedJwt = jwt.decode(authToken,JWTSECRET)
-            let currentUser = await db_findUser({name: decodedJwt.login});
-            userLikes = currentUser.likedTweets;
-        }
-        
-        tweets = tweets.map(t=>{
-            let {_id, ...mappedTweet} = t
-            return {
-                ...mappedTweet,
-                id: t._id
-            }
-        })
-
-        tweets = tweets.map(t => mapTweetToLikedTweet(t,userLikes));
-        return tweets;
+        return tweetArrayMarkLiked(tweets,userLogin);
     }catch(e){
         throw e;
     }
 }
 
-const fetchReplies = async(id, authToken) => {
+const fetchReplies = async(id, userLogin) => {
     try{
-
         let tweets = await db_findReplies({id: id});
-        let userLikes;
-        if(authToken)
-        {
-            const decodedJwt = jwt.decode(authToken,JWTSECRET)
-            let currentUser = await db_findUser({name: decodedJwt.login});
-            userLikes = currentUser.likedTweets;
-        }
-        
-        tweets = tweets.map(t=>{
-            let {_id, ...mappedTweet} = t
-            return {
-                ...mappedTweet,
-                id: t._id
-            }
-        })
-
-        return tweets.map(t => mapTweetToLikedTweet(t,userLikes))
+        return tweetArrayMarkLiked(tweets,userLogin);
     }catch(e){
         throw e;
     }
 }
 
-const insertTweet = async(tweet) => {
-    ['content', 'authorId'].forEach(k => {
-        if(tweet[k] == undefined)
-        {
-            throw new Error("400")
-        }
-    });
-    
+const insertTweet = async(tweet, userLogin) => {
     try{
+        let currentUser = await db_findUser({name: userLogin});
+        if(currentUser._id != tweet.authorId){
+            throw new InvalidRequestError("Invalid authorId param, must be the same as currently logged in user.");
+        }
         let insertedTweet = await db_insertTweet(tweet);
         let {_id, ...mappedTweet} = insertedTweet
         return {
@@ -132,32 +70,13 @@ const insertTweet = async(tweet) => {
     }
 }
 
-const switchTweetLike = async(tweetId, authToken) => {
-    console.log("switch tweet like");
-    console.log(tweetId);
-    console.log(authToken);
-
-    if(authToken == undefined || tweetId == undefined)
-    {
-        throw new Error("400")
-    }
-
-    let userId;
-    if(authToken)
-    {
-        const decodedJwt = jwt.decode(authToken,JWTSECRET)
-        console.log(decodedJwt);
-        let currentUser = await db_findUser({name: decodedJwt.login});
-        console.log(currentUser);
-        userId = currentUser._id;
-    }
-    
+const switchTweetLike = async(tweetId, userLogin) => {
     try{
-        const user = await db_findUser({_id: userId})
+        const user = await db_findUser({name: userLogin});
         if(user.likedTweets.map((lt) => lt.toString()).includes(tweetId))
-            return await db_removeTweetFromUserLikes(userId, tweetId);
+            return await db_removeTweetFromUserLikes(user._id, tweetId);
         else
-            return await db_insertTweetToUserLikes(userId, tweetId);
+            return await db_insertTweetToUserLikes(user._id, tweetId);
     }catch(e){
         console.error(e);
         throw e;
@@ -166,8 +85,21 @@ const switchTweetLike = async(tweetId, authToken) => {
 
 }
 
-const tweetArrayMarkLiked = (tweets) => {
-    
+const tweetArrayMarkLiked = async(tweets,userLogin) => {
+    let userLikes = undefined;
+    if(userLogin){
+        let currentUser = await db_findUser({name: userLogin});
+        userLikes = currentUser.likedTweets;
+    }
+    tweets = tweets.map(t=>{
+        let {_id, ...mappedTweet} = t
+        mappedTweet = {...mappedTweet, id: t._id};
+        if(userLikes){
+            mappedTweet = mapTweetToLikedTweet(mappedTweet,userLikes);
+        }
+        return mappedTweet;
+    });
+    return tweets;
 }
 
 const mapTweetToLikedTweet  = (tweet, userLikes) => {
