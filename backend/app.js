@@ -6,7 +6,8 @@ const port = 3000
 const {generateDatabase} = require('./mockDb');
 const {db_generateMock} = require('./db')
 const { errorResponder } = require('./middleware/errorResponder')
-const { errorLogger } = require('./middleware/errorLogger')
+const { errorLogger } = require('./middleware/errorLogger');
+const { tokenDecodeMiddleware } = require('./middleware/auth');
 
 // const mockDb = generateDatabase();
 
@@ -20,6 +21,7 @@ app.use((req,res,next) => {
 
     next();
 });
+app.use(tokenDecodeMiddleware);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use('/api',routes);
