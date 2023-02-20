@@ -31,10 +31,31 @@ const db_findProfile = async(query,options) => {
     const tweetCount  = await db.collection("tweets").countDocuments({authorId: {$eq: prof.userId}});
 
     return {...prof, user: {...user,}, tweetCount: tweetCount}
+}
 
+const db_editProfile = async(id,doc) => {
+    try{
+        id = new ObjectId(id);
+        const updateRes = await db.collection("profiles").updateOne(
+            {
+                _id: id
+            },
+            {
+                $set: {
+                    description: doc.description
+                },
+            }
+        );
+
+        console.log(updateRes);
+        return true;
+    }catch(e){
+        throw e;
+    }
 }
 
 module.exports = {
     db_findProfile,
-    db_insertProfile
+    db_insertProfile,
+    db_editProfile,
 }
