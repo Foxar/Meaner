@@ -8,6 +8,12 @@
             </div>
             <mat-icon class="link-chevron">chevron_right</mat-icon>
         </a>
+        <a class="settings-category-link" routerLink="profile" [ngClass]="{'selected-category': categoryChosen == 'password'}">
+            <div class="link-label" id="passwordlink">
+                Profile
+            </div>
+            <mat-icon class="link-chevron">chevron_right</mat-icon>
+        </a>
     </div>
     <div class="tabcontent">
         <router-outlet></router-outlet>

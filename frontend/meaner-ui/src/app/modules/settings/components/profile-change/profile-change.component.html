@@ -1,0 +1,17 @@
+<div *ngIf="(settingsPageStatus$ | async) == 'ERROR'">
+    Something went wrong. Please try again later.
+</div>
+<h1>
+    Change description
+</h1>
+<form [formGroup]="this.changeProfileForm">
+    <mat-form-field class="settings-profile-description-input form-field" [hideRequiredMarker]="true" appearance="outline">
+        <mat-label>Profile description</mat-label>
+        <textarea matInput formControlName="description" type="password" rows="5">
+        </textarea>
+        <mat-error *ngIf="this.changeProfileForm.controls['description'].hasError('required')">
+            Required
+        </mat-error>
+    </mat-form-field>
+    <button mat-flat-button color="primary" class="button-save-profile" type="button" (click)="onSave()">Save</button>
+</form>
