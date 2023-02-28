@@ -28,9 +28,24 @@ const getProfileByUserId = async (req,res,next) => {
     }
 }
 
+const putEditProfileById = async(req,res,next) => {
+    try{
+        const {id} = req.params;
+        const userLogin = req.userLogin;
+        if(!id){
+            throw new InvalidRequestError("Missing profileId parameter.");
+        }
+        const editRes = await profileService.editProfileByUserId(id, userLogin, {description: req.body.description});
+        res.status(201).json({message: 'Success'});
+    }catch(e){
+        next(e);
+    }
+}
+
 //TO-DO Modifying and deleting (?) the profile
 
 module.exports = {
     getProfileById,
-    getProfileByUserId
+    getProfileByUserId,
+    putEditProfileById
 }

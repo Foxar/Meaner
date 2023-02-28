@@ -12,3 +12,14 @@ export const changePasswordFailure = createAction(
     props<{error: string}>()
 )
 
+export const changeDescription = createAction(
+    '[Settings] Change description',
+    props<{description: string}>()
+)
+
+export const changeDescriptionSuccess = createAction('[Settings] Change description success')
+
+export const changeDescriptionFailure = createAction(
+    '[Settings] Change description failure',
+    props<{error: string}>()
+)

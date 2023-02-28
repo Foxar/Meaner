@@ -1,10 +1,14 @@
 import { createReducer, on } from "@ngrx/store";
-import { changePassword, changePasswordFailure, changePasswordSuccess } from "./settings.action";
+import { changeDescription, changeDescriptionFailure, changeDescriptionSuccess, changePassword, changePasswordFailure, changePasswordSuccess } from "./settings.action";
 import { SettingsCategoryStatus, SettingsState } from "./settings.state";
 
 export const initialState: SettingsState = {
     categories: {
         changePassword: {
+            error: null,
+            status: SettingsCategoryStatus.INIT
+        },
+        changeDescription: {
             error: null,
             status: SettingsCategoryStatus.INIT
         }
@@ -39,6 +43,37 @@ export const settingsReducer = createReducer(
             ...state.categories,
             changePassword: {
                 ...state.categories.changePassword,
+                status: SettingsCategoryStatus.ERROR,
+                error: error
+            }
+        }
+    })),
+    on(changeDescription, (state: SettingsState) => ({
+        ...state,
+        categories: {
+            ...state.categories,
+            changeDescription: {
+                ...state.categories.changeDescription,
+                status: SettingsCategoryStatus.PENDING
+            }
+        }
+    })),
+    on(changeDescriptionSuccess, (state: SettingsState) => ({
+        ...state,
+        categories: {
+            ...state.categories,
+            changeDescription: {
+                ...state.categories.changeDescription,
+                status: SettingsCategoryStatus.INIT,
+            }
+        }
+    })),
+    on(changeDescriptionFailure, (state: SettingsState, { error }) => ({
+        ...state,
+        categories: {
+            ...state.categories,
+            changeDescription: {
+                ...state.categories.changeDescription,
                 status: SettingsCategoryStatus.ERROR,
                 error: error
             }

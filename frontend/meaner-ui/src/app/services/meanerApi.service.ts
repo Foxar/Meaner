@@ -98,6 +98,13 @@ export class MeanerApiService {
         );
     }
 
+    postDescriptionChange(userId: string, description: string): Observable<{}> {
+        // let body = {userId, };
+        return this.http.put(`${this.apiUrl}profile/${userId}`, {description: description}).pipe(
+            tap((a)=>{console.log("postPasswordChange()");console.log(a)})
+        );
+    }
+
     likeTweet(tweetId: string): Observable<{}> {
         console.log("ee");
         return this.http.put(`${this.apiUrl}tweets/like/${tweetId}`,{}).pipe(

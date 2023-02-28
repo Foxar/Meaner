@@ -7,18 +7,21 @@
     .formError {
         margin-left: 25px;
     }
-}
-
-.settings-password-input {
-    padding: 25px 75px 0 75px;
-    &.currentpassword {
-        box-sizing: border-box;
-        border-bottom: 1px solid rgb(47, 51, 54);
+    .form-field {
+        padding: 25px 75px 0 75px
+    }
+    button {
+        margin: 25px 75px 0 75px;
     }
 }
 
-.button-save-password{
-    margin: 25px 75px 0 75px;
+.settings-profile-description-input {
+    padding: 25px 25px 0 25px;
+    
+}
+
+.button-save-profile{
+    margin: 25px 25px 0 25px;
     padding: 0 24px;
     align-self: flex-end;
     border-radius: 25px;

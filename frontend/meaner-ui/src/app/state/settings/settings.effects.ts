@@ -6,7 +6,7 @@ import { catchError, map, of, switchMap, tap, withLatestFrom } from "rxjs";
 import { BasicPopupComponent, BasicPopupType } from "src/app/modules/shared/components/basic-popup/basic-popup.component";
 import { MeanerApiService } from "src/app/services/meanerApi.service";
 import { selectUser } from "../user/user.selector";
-import { changePassword, changePasswordFailure, changePasswordSuccess } from "./settings.action";
+import { changeDescription, changeDescriptionFailure, changeDescriptionSuccess, changePassword, changePasswordFailure, changePasswordSuccess } from "./settings.action";
 
 @Injectable()
 export class SettingsEffects {
@@ -73,6 +73,64 @@ export class SettingsEffects {
                         data: {
                             type: BasicPopupType.POPUP_FAILURE,
                             message: 'Failed to change password. Please try again later.'
+                        }
+                    })
+                })
+            ),
+            {
+                dispatch: false
+            }
+    )
+
+    changeDescription$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(changeDescription),
+            withLatestFrom(this.store.select(selectUser)),
+            switchMap(([action, user]) => {
+                console.log("Change password action effect");
+                if(!user)
+                    return of(changeDescriptionFailure({error: "Error changing password, is the user logged in?"}))
+                return this.meanerService.postDescriptionChange(user.id, action.description).pipe(
+                    tap(console.log),
+                    tap(() => {console.log(`Changing ${user.id} profile description to ${action.description}`)}),
+                    map(() => {
+                        return changeDescriptionSuccess();
+                    }),
+                    catchError((error) => {
+                        console.log(error);
+                        return of(changeDescriptionFailure({error: error.message}))
+                    })
+                )
+            }),
+            tap(console.log)
+        )
+    )
+
+    changeDescriptionSuccess$ = createEffect(() => 
+            this.actions$.pipe(
+                ofType(changeDescriptionSuccess),
+                tap(() => {
+                    this.snackbar.openFromComponent(BasicPopupComponent, {
+                        data: {
+                            type: BasicPopupType.POPUP_SUCCESS,
+                            message: 'Success!'
+                        }
+                    })
+                })
+            ),
+            {
+                dispatch: false
+            }
+    )
+
+    changeDescriptionFailure$ = createEffect(() => 
+            this.actions$.pipe(
+                ofType(changeDescriptionFailure),
+                tap(() => {
+                    this.snackbar.openFromComponent(BasicPopupComponent, {
+                        data: {
+                            type: BasicPopupType.POPUP_FAILURE,
+                            message: 'Failed to change description. Please try again later.'
                         }
                     })
                 })

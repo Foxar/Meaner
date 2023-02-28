@@ -32,6 +32,15 @@ class InvalidAuthTokenError extends OperationalError {
     }
 }
 
+class NotAuthorizedError extends OperationalError {
+    constructor(message) {
+        super();
+        this.name = this.constructor.name;
+        this.message = message;
+        this.statusCode = 403;
+    }
+}
+
 class InvalidRequestError extends OperationalError {
     constructor(message) {
         super();
@@ -57,5 +66,6 @@ module.exports = {
     InvalidLoginError,
     InvalidAuthTokenError,
     InvalidRequestError,
-    ResourceNotFoundError
+    ResourceNotFoundError,
+    NotAuthorizedError
 }

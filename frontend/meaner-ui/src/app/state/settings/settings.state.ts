@@ -9,6 +9,10 @@ export interface SettingsState {
         changePassword: {
             error: string | null;
             status: SettingsCategoryStatus;
+        };
+        changeDescription: {
+            error: string | null;
+            status: SettingsCategoryStatus;
         }
     }
 }

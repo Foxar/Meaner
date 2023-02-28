@@ -11,6 +11,7 @@ import { settingsReducer } from "src/app/state/settings/settings.reducer";
 import { SharedModule } from "../shared/shared.module";
 import { SettingsPasswordChangeComponent } from "./components/settings-password-change/settings-password-change.component";
 import { SettingsPageComponent } from "./pages/settings-page.component";
+import { ProfileChangeComponent } from './components/profile-change/profile-change.component';
 
 const routes: Routes = [
     {
@@ -20,6 +21,10 @@ const routes: Routes = [
         {
           path: 'password',
           component: SettingsPasswordChangeComponent,
+        },
+        {
+          path: 'profile',
+          component: ProfileChangeComponent,
         }
       ]
     }
@@ -29,7 +34,8 @@ const routes: Routes = [
   @NgModule({
     declarations: [
         SettingsPageComponent,
-        SettingsPasswordChangeComponent
+        SettingsPasswordChangeComponent,
+        ProfileChangeComponent
     ],
     imports: [
       ReactiveFormsModule,
