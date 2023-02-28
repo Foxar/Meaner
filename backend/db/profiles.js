@@ -33,12 +33,11 @@ const db_findProfile = async(query,options) => {
     return {...prof, user: {...user,}, tweetCount: tweetCount}
 }
 
-const db_editProfile = async(id,doc) => {
+const db_editProfile = async(doc) => {
     try{
-        id = new ObjectId(id);
         const updateRes = await db.collection("profiles").updateOne(
             {
-                _id: id
+                userId: doc.userId
             },
             {
                 $set: {
@@ -46,8 +45,6 @@ const db_editProfile = async(id,doc) => {
                 },
             }
         );
-
-        console.log(updateRes);
         return true;
     }catch(e){
         throw e;
