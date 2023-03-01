@@ -62,13 +62,12 @@ export class HomePageComponent implements OnInit, OnDestroy {
     this.store.select(selectUserStatus).pipe(tap(()=>{console.log("USER STATUS SELECTOR")}),tap(console.log)).subscribe(u=>{
       console.log(u);
     })
-    this.appContainerEl = document.querySelector(".appContainer");
-    this.appContainerEl.addEventListener("scroll", this.onScroll.bind(this))
   }
 
-  onScroll(event: Event){
-    const percentScroll = this.appContainerEl.scrollHeight / (document.body.scrollHeight - window.innerHeight);
-    if(percentScroll > 0.8 && (this.homeStatus) != HomeStateStatus.LOADING_MORE)
+  @HostListener('window:scroll', ['$event'])
+  onScroll(){
+    const percentScroll = (window.innerHeight + window.scrollY)/document.body.scrollHeight;
+    if(percentScroll > 0.6 && (this.homeStatus) != HomeStateStatus.LOADING_MORE)
       this.store.dispatch(loadTweets({append:true}));
   }
 
